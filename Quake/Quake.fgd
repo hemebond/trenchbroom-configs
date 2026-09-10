@@ -65,7 +65,7 @@
 @PointClass base(PlayerClass) = info_player_deathmatch : "Deathmatch start" []
 @PointClass base(PlayerClass) = testplayerstart : "Testing player start" []
 @PointClass size(-32 -32 0, 32 32 64) base(PlayerClass, Targetname) = info_teleport_destination : "Teleporter destination" []
-@PointClass color(200 150 150) model({"path": "tb/info_null.png", "scale": "0.125"}) = info_null : "info_null (spotlight target)"
+@PointClass base(Targetname) color(200 150 150) model({"path": "tb/info_null.png", "scale": "0.125"}) = info_null : "info_null (spotlight target)"
 [
 	targetname(target_source) : "Name"
 ]
@@ -78,7 +78,7 @@
 	noise(string) : "noise"
 	touch(string) : "self.touch"
 ]
-@PointClass base(Appearflags) model({"path": "tb/video.png", "scale": "0.125"}) = info_intermission : "Intermission camera"
+@PointClass base(Appearflags) model({"path": "tb/info_intermission.png", "scale": "0.125"}) = info_intermission : "Intermission camera"
 [
 	mangle(string) : "Camera angle (Pitch Yaw Roll)"
 ]
@@ -295,8 +295,8 @@ They rip pieces of their flesh off themselves and throw them as their attack. Th
 	base(Light, Target, Targetname)
 	model({{
 		_sun == 1         -> {"path": "tb/sun.png", "scale": "0.125"},
-		spawnflags == "1" -> {"path": "tb/bulb-off.png", "scale": "0.125"},
-		                     {"path": "tb/bulb.png", "scale": "0.125"}
+		spawnflags == "1" -> {"path": "tb/light_off.png", "scale": "0.125"},
+		                     {"path": "tb/light.png", "scale": "0.125"}
 	}}) =
 	light : "Invisible light source"
 	[
@@ -305,7 +305,7 @@ They rip pieces of their flesh off themselves and throw them as their attack. Th
 @PointClass size(-8 -8 -8, 8 8 8) base(Light, Target, Targetname)
 	model({{
 		spawnflags == "1" -> {"path": "tb/fluro-off.png", "scale": "0.125"},
-		                     {"path": "tb/fluoro.png", "scale": "0.125"}
+		                     {"path": "tb/light_fluoro.png", "scale": "0.125"}
 	}}) =
 	light_fluoro : "Fluorescent light"
 	[
@@ -314,7 +314,7 @@ They rip pieces of their flesh off themselves and throw them as their attack. Th
 @PointClass size(-8 -8 -8, 8 8 8) base(Light, Target, Targetname)
 	model({{
 		spawnflags == "1" -> {"path": "tb/fluro-off.png", "scale": "0.125"},
-		                     {"path": "tb/fluoro.png", "scale": "0.125"}
+		                     {"path": "tb/light_fluoro.png", "scale": "0.125"}
 	}}) =
 	light_fluorospark : "Sparking fluorescent light"
 	[
@@ -404,15 +404,15 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
 // ambient sounds
 //
 
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/volume.png", "scale": "0.125"}) = ambient_drip : "Dripping sound" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/volume.png", "scale": "0.125"}) = ambient_drone : "Engine/machinery sound" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/volume.png", "scale": "0.125"}) = ambient_comp_hum : "Computer background sounds" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/volume.png", "scale": "0.125"}) = ambient_flouro_buzz : "Fluorescent buzzing sound" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/volume.png", "scale": "0.125"}) = ambient_light_buzz : "Buzzing sound from light" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/volume.png", "scale": "0.125"}) = ambient_suck_wind : "Wind sound" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/volume.png", "scale": "0.125"}) = ambient_swamp1 : "Frogs croaking" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/volume.png", "scale": "0.125"}) = ambient_swamp2 : "Frogs croaking B" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/volume.png", "scale": "0.125"}) = ambient_thunder : "Thunder sound" []
+@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_drip : "Dripping sound" []
+@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_drone : "Engine/machinery sound" []
+@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_comp_hum : "Computer background sounds" []
+@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_flouro_buzz : "Fluorescent buzzing sound" []
+@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_light_buzz : "Buzzing sound from light" []
+@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_suck_wind : "Wind sound" []
+@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_swamp1 : "Frogs croaking" []
+@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_swamp2 : "Frogs croaking B" []
+@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_thunder : "Thunder sound" []
 
 //
 // moving things
@@ -502,7 +502,7 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
 	dmg(integer) : "Damage on block" : 2
 ]
 
-@PointClass base(Appearflags, Targetname) size(16 16 16) color(0 255 255) model({"path": "tb/arrow.mdl"}) =
+@PointClass base(Appearflags, Targetname) size(16 16 16) color(0 255 255) model({"path": "tb/path_corner.png", "scale": "0.125"}) =
 	path_corner : "Waypoint for platforms and monsters"
 [
 	target(target_destination) : "Next target"
@@ -617,7 +617,7 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
 	speed(integer) : "Jump Speed" : 200
 	height(integer) : "Jump Height" : 200
 ]
-@PointClass base(Appearflags, Target, Targetname) model({"path": "tb/numbers.png", "scale": "0.125"}) = trigger_counter : "Trigger: Counter"
+@PointClass base(Appearflags, Target, Targetname) model({"path": "tb/trigger_counter.png", "scale": "0.125"}) = trigger_counter : "Trigger: Counter"
 [
 	spawnflags(flags) = [ 1: "No Message" : 0 ]
 	count(integer) : "Count before trigger" : 2
@@ -635,7 +635,3 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
 ]
 @PointClass size(16 16 16) = misc_noisemaker : "Debug entity: continuously plays enforcer sounds" []
 @PointClass size(16 16 16) = viewthing : "Debug entity: fake player model" []
-
-@PointClass base(Appearflags) color(0 150 220) model({
-	"path" : mdl
-}) = foo_bubbles : "Foo bubbles" []

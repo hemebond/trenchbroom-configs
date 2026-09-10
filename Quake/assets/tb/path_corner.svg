@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   fill="none"
+   stroke="currentColor"
+   stroke-width="2"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   class="icon icon-tabler icons-tabler-outline icon-tabler-s-turn-right"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="path_corner.svg"
+   inkscape:export-filename="path_corner.png"
+   inkscape:export-xdpi="472.61539"
+   inkscape:export-ydpi="472.61539"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="namedview4"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="23.128071"
+     inkscape:cx="10.744519"
+     inkscape:cy="9.9662439"
+     inkscape:window-width="1642"
+     inkscape:window-height="1190"
+     inkscape:window-x="26"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg4" />
+  <rect
+     style="color:#000000;overflow:visible;fill:#0094ff;fill-opacity:1;stroke:#0094ff;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1"
+     id="rect1"
+     width="24"
+     height="24"
+     x="0"
+     y="0"
+     ry="2.5" />
+  <path
+     d="M3 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"
+     id="path2" />
+  <path
+     d="M7 5h9.5a3.5 3.5 0 0 1 0 7h-9a3.5 3.5 0 0 0 0 7h13.5"
+     id="path3" />
+  <path
+     d="M18 16l3 3l-3 3"
+     id="path4" />
+</svg>
