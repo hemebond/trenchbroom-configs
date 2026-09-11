@@ -394,13 +394,12 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
 		2 : "Laser" : 0 : "15 HP"
 	]
 ]
-@SolidClass base(EWT_base_BModel) = func_group : "Group of brushes for in-editor use" []
 
 //
 // ambient sounds
 //
 
-@BaseClass base(AppearFlags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = AmbientSound []
+@BaseClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = AmbientSound []
 @PointClass base(AmbientSound) = ambient_drip : "Dripping sound" []
 @PointClass base(AmbientSound) = ambient_drone : "Engine/machinery sound" []
 @PointClass base(AmbientSound) = ambient_comp_hum : "Computer background sounds" []
