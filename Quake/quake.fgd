@@ -9,11 +9,13 @@
 // Modified by CZG : grawert@online.no : http://www.planetquake.com/greyvoid/
 // further modified by various authors
 
+@include "ericw_tools.fgd"
+
 //
 // worldspawn
 //
 
-@SolidClass = worldspawn : "World entity"
+@SolidClass base(EWT_base_Worldspawn) = worldspawn : "World entity"
 [
 	message(string) : "Text on entering the world"
 	worldtype(choices) : "Ambience" : 0 =
@@ -23,9 +25,6 @@
 		2 : "Base"
 	]
 	sounds(integer) : "CD track to play" : 0
-	light(integer) : "Ambient light"
-	_sunlight(integer) : "Sunlight"
-	_sun_mangle(string) : "Sun mangle (Yaw pitch roll)"
 ]
 
 //
@@ -260,7 +259,7 @@ They rip pieces of their flesh off themselves and throw them as their attack. Th
 // lights
 //
 
-@baseclass color(255 255 40) = Light [
+@baseclass color(255 255 40) base(EWT_base_PointLight) = Light [
 	light(integer) : "Brightness" : 300
 	wait(integer) : "Fade distance multiplier" : 1
 	delay(choices) : "Attenuation" =
@@ -347,7 +346,7 @@ They rip pieces of their flesh off themselves and throw them as their attack. Th
 // misc
 //
 
-@SolidClass base(Appearflags) = func_illusionary : "Static nonsolid model"  []
+@SolidClass base(Appearflags, EWT_base_BModel) = func_illusionary : "Static nonsolid model"  []
 
 @PointClass base(Appearflags) color(0 150 220) model({ "path": ":progs/s_bubble.spr" }) = air_bubbles : "Air bubbles" []
 @PointClass base(Appearflags, Targetname) model({"path": "tb/bolt.png", "scale": "0.125"}) =
@@ -395,36 +394,34 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
 		2 : "Laser" : 0 : "15 HP"
 	]
 ]
-@SolidClass = func_group : "Group of brushes for in-editor use" []
-@SolidClass = func_detail : "Group of brushes for certain compilers" []
-@SolidClass = func_detail_illusionary : "func_detail variant with no collision (players / monsters / gunfire) and doesn't split world faces." []
-@SolidClass = func_detail_wall : "func_detail variant that doesn't split world faces." []
+@SolidClass base(EWT_base_BModel) = func_group : "Group of brushes for in-editor use" []
 
 //
 // ambient sounds
 //
 
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_drip : "Dripping sound" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_drone : "Engine/machinery sound" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_comp_hum : "Computer background sounds" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_flouro_buzz : "Fluorescent buzzing sound" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_light_buzz : "Buzzing sound from light" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_suck_wind : "Wind sound" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_swamp1 : "Frogs croaking" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_swamp2 : "Frogs croaking B" []
-@PointClass base(Appearflags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = ambient_thunder : "Thunder sound" []
+@BaseClass base(AppearFlags) color(150 0 150) model({"path": "tb/sound.png", "scale": "0.125"}) = AmbientSound []
+@PointClass base(AmbientSound) = ambient_drip : "Dripping sound" []
+@PointClass base(AmbientSound) = ambient_drone : "Engine/machinery sound" []
+@PointClass base(AmbientSound) = ambient_comp_hum : "Computer background sounds" []
+@PointClass base(AmbientSound) = ambient_flouro_buzz : "Fluorescent buzzing sound" []
+@PointClass base(AmbientSound) = ambient_light_buzz : "Buzzing sound from light" []
+@PointClass base(AmbientSound) = ambient_suck_wind : "Wind sound" []
+@PointClass base(AmbientSound) = ambient_swamp1 : "Frogs croaking" []
+@PointClass base(AmbientSound) = ambient_swamp2 : "Frogs croaking B" []
+@PointClass base(AmbientSound) = ambient_thunder : "Thunder sound" []
 
 //
 // moving things
 //
 
 
-@SolidClass base(Angle, Appearflags, Targetname, Target) = func_door : "Basic door"
+@SolidClass base(Angle, Appearflags, Targetname, Target, EWT_base_BModel) = func_door : "Basic door"
 [
 	speed(integer) : "Speed" : 100
 	sounds(choices) : "Sound" : 0 =
 	[
-        	0: "Silent"
+		0: "Silent"
 		1: "Stone"
 		2: "Machine"
 		3: "Stone Chain"
@@ -440,12 +437,12 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
 		1 : "Starts Open" : 0
 		4 : "Don't link" : 0
 		8 : "Gold Key required" : 0
-        	16: "Silver Key required" : 0
-        	32: "Toggle" : 0
+		16: "Silver Key required" : 0
+		32: "Toggle" : 0
 	]
 ]
 
-@SolidClass base(Appearflags, Targetname, Target) = func_door_secret : "Secret door"
+@SolidClass base(Appearflags, Targetname, Target, EWT_base_BModel) = func_door_secret : "Secret door"
 [
 	angle(integer) : "Direction of second move"
 	t_width(integer) : "First move length"
@@ -465,14 +462,14 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
 		2 : "Move left first" : 0
 		4 : "Move down first" : 0
 		8 : "Not shootable" : 0
-        16 : "Always shootable" : 0
+		16 : "Always shootable" : 0
 	]
 ]
 
-@SolidClass base(Appearflags, Targetname) = func_wall : "Wall, starts animation when triggered (if supporting texture)" []
+@SolidClass base(Appearflags, Targetname, EWT_base_BModel) = func_wall : "Wall, starts animation when triggered (if supporting texture)" []
 
 
-@SolidClass base(Angle, Appearflags, Targetname) = func_button : "Button"
+@SolidClass base(Angle, Appearflags, Targetname, EWT_base_BModel) = func_button : "Button"
 [
 	speed(integer) : "Speed" : 40
 	lip(integer) : "Lip" : 4
@@ -490,7 +487,7 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
 	message(string) : "Message"
 ]
 
-@SolidClass base(Appearflags, Targetname) = func_train : "Moving platform"
+@SolidClass base(Appearflags, Targetname, EWT_base_BModel) = func_train : "Moving platform"
 [
 	sounds(choices) : "Sound" : 1 =
 	[
@@ -509,7 +506,7 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
 	wait(integer) : "Wait" : 0
 ]
 
-@SolidClass base(Appearflags, Targetname) = func_plat : "Elevator"
+@SolidClass base(Appearflags, Targetname, EWT_base_BModel) = func_plat : "Elevator"
 [
 	spawnflags(Flags) =
 	[
@@ -525,7 +522,7 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
 	]
 ]
 
-@SolidClass base(Appearflags) = func_episodegate : "Episode Gate"
+@SolidClass base(Appearflags, EWT_base_BModel) = func_episodegate : "Episode Gate"
 [
 	spawnflags(Flags) =
 	[
@@ -536,7 +533,7 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
 	]
 ]
 
-@SolidClass base(Appearflags) = func_bossgate : "Boss gate" []
+@SolidClass base(Appearflags, EWT_base_BModel) = func_bossgate : "Boss gate" []
 
 //
 // triggers
@@ -609,9 +606,7 @@ Fires continous stream of spikes with options to delay the 1st shot and then set
         3 : "Nightmare!"
 	]
 ]
-@PointClass base(Trigger) model({"path": "tb/trigger_relay.png", "scale": "0.125"}) = trigger_relay : "Trigger: Relay"
-[
-]
+@PointClass base(Trigger) model({"path": "tb/trigger_relay.png", "scale": "0.125"}) = trigger_relay : "Trigger: Relay" []
 @SolidClass base(Angle, Appearflags, Targetname) = trigger_monsterjump : "Trigger: Monster jump"
 [
 	speed(integer) : "Jump Speed" : 200
