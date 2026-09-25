@@ -69,7 +69,7 @@
 	targetname(target_source) : "Name"
 ]
 
-@PointClass base(Appearflags, Target, Targetname) color(200 150 150) model({"path": "tb/info_notnull.png", "scale": "0.125"})= info_notnull : "Wildcard entity" // I love you
+@PointClass base(Appearflags, Target, Targetname) color(200 150 150) model({"path": "tb/info_notnull.png", "scale": "0.125"}) = info_notnull : "Wildcard entity" // I love you
 [
 	use(string) : "self.use"
 	think(string) : "self.think"
