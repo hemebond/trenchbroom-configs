@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   fill="none"
+   stroke="currentColor"
+   stroke-width="2"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   class="icon icon-tabler icons-tabler-outline icon-tabler-settings-pause"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="settings-pause.svg"
+   inkscape:export-filename="trigger_deactivate.png"
+   inkscape:export-xdpi="472.61539"
+   inkscape:export-ydpi="472.61539"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs5" />
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="78.541667"
+     inkscape:cx="12"
+     inkscape:cy="12"
+     inkscape:window-width="3840"
+     inkscape:window-height="2094"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5" />
+  <rect
+     style="color:#000000;overflow:visible;fill:#0094ff;stroke:#0094ff;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:10"
+     id="rect5"
+     width="24"
+     height="24"
+     x="0"
+     y="0"
+     ry="2.5" />
+  <path
+     d="M13.004 20.69c-.905 .632 -2.363 .296 -2.679 -1.007a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.314 .319 1.645 1.798 .992 2.701"
+     id="path2" />
+  <path
+     d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
+     id="path3" />
+  <path
+     d="M17 17v5"
+     id="path4" />
+  <path
+     d="M21 17v5"
+     id="path5" />
+</svg>
