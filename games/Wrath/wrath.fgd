@@ -1,0 +1,2736 @@
+// Wrath game definition file (.fgd)
+// Generated from Wrath QuakeC source comments on 20261007
+
+//
+// wrathdefs.qc
+//
+@include "q3map2.fgd"
+
+@BaseClass = TargetName [
+    targetname(target_source) : "Name"
+]
+@BaseClass = Target [
+    target(target_destination) : "Target" : "All entities with a matching targetname will be triggered."
+]
+
+
+//
+// main.qc
+//
+@SolidClass base(Q3Map2Worldspawn) color(0 0 0) = worldspawn : "Only used for the world." [
+    message(string) : "Logon Message" : : "Text to print at user logon. Used for name of level."
+    music(sound) : "Music File" : : "Path/name of looping .wav file used for level's music (e.g. music/sonic5.wav)."
+    gravity(float) : "Gravity" : "800" : "Gravity of level (default normal gravity: 800)."
+    episode(choices) : "Episode" : 1 = [
+        1 : "Episode 1"
+        2 : "Episode 2"
+        3 : "Episode 3"
+    ]
+]
+
+
+//
+// player/camera.qc
+//
+@PointClass
+	size(-16 -16 -16, 16 16 16)
+	model("tb/camera.png")
+= camera [
+	angles(vector) : "Angles" : "0 0 0" : ""
+]
+
+
+//
+// player/client.qc
+//
+@PointClass
+	color(.8 .8 .8)
+	size(-16 -16 -32, 16 16 32)
+= info_player_start : "The normal starting point for a level. Only one is allowed." [
+	location(integer) : "Location place" : : "Location place number identifier related to the last trigger_exitlevel touched in the previous level."
+	angle(float) : "Yaw Angle" : : "viewing angle when spawning"
+]
+@PointClass
+	color(.7 .7 .7)
+	size(-16 -16 -24, 16 16 32)
+= info_player_deathmatch : "Normal player spawning location for Q3A levels." [
+	angle(float) : "Yaw Angle" : : "Direction in which player will look when spawning in the game. Does not apply to bots."
+	target(target_destination) : "Target" : : "This can point at a target_give entity for respawn freebies."
+	spawnflags(flags) = [
+		1 : "Initial Spawn Point" : 0 : "Makes the spawnpoint the initial place for the player to spawn at the beginning of the game."
+	]
+]
+@PointClass
+	color(.8 .8 .8)
+	size(-16 -16 -32, 16 16 32)
+= info_player_coop : "The normal starting point for a level." [
+	location(integer) : "Location place" : : "Location place number identifier related to the last trigger_exitlevel touched in the previous level."
+	angle(float) : "Yaw Angle" : : "viewing angle when spawning"
+]
+@PointClass
+	base(TargetName)
+	color(.5 0 .5)
+	size(-32 -32 -64, 32 32 64)
+	model({"path": "models/portals/portal_level_to_hub.md3", "frame": "19"})
+= portal_level_to_hub : "A portal back to the hub that is activated by a targeting relic." [
+	wait(float) : "Return Delay" : "1" : "delay before firing (after being triggered)"
+	map(string) : "Next Map" : "" : "name of the next map, dont use `.bsp` extension"
+	location(integer) : "Location place" : 0 : "Location place number identifier related to the next map info_player_start."
+]
+
+
+//
+// player/use.qc
+//
+@PointClass
+	color(0 0.4 1)
+	size(-12 -12 -16, 12 12 16)
+	model({{
+		model -> model, "models/objects/switches/e1_switch1.md3"
+	}})
+= object_switch : "When a switch is used by a player, it moves in the direction set by the `angle` key, triggers all its targets." [
+	model(model) : "Model File" : "models/objects/switches/e1_switch1.md3" : "Path/name of model to use"
+	angles(vector) : "Angles" : "0 0 0"
+	target(target_destination) : "Target" : : "All entities with a matching targetname will be triggered."
+	wait(float) : "Return Delay" : "-1" : "Number of seconds button stays pressed (-1 = no return)."
+	delay(float) : "Delay" : "0" : "delay before firing (after being used)"
+]
+
+
+//
+// intermission.qc
+//
+@PointClass
+	size(-16 -16 -16, 16 16 16)
+	model("tb/camera.png")
+= info_intermission [
+	angles(vector) : "Angles" : "0 0 0" : ""
+]
+
+
+//
+// weapons/weapon_system.qc
+//
+@BaseClass = Weapon [
+    spawnflags(flags) = [
+        1 : "Inspect Animation" : 0 : "Play inpect animation when pickup up."
+    ]
+]
+
+
+//
+// weapons/w_melee.qc
+//
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/melee/w_blade.md3"})
+= weapon_blade : "Blade" []
+@SolidClass = trigger_melee : "Give the player the melee weapon and switch to it." []
+
+
+//
+// weapons/w_revolver.qc
+//
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/revolver/w_revolver.md3"})
+= weapon_revolver : "Revolver" []
+
+
+//
+// weapons/w_cannon.qc
+//
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/cannon/w_cannon.md3"})
+= weapon_cannon : "Cannon" []
+
+
+//
+// weapons/w_spitter.qc
+//
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/spitter/w_spitter.md3"})
+= weapon_spitter : "Spitter gun" []
+
+
+//
+// weapons/w_retcher.qc
+//
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/retcher/w_retcher.md3"})
+= weapon_retcher : "Retcher" []
+
+
+//
+// weapons/w_shotgun.qc
+//
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/shotgun/w_shotgun.md3"})
+= weapon_shotgun : "Shotgun" []
+
+
+//
+// weapons/w_lance.qc
+//
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/lance/w_lance.md3"})
+= weapon_lance : "Lance" []
+
+
+//
+// weapons/w_crystal.qc
+//
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/crystal/w_crystal.md3"})
+= weapon_crystal : "Lance" []
+
+
+//
+// weapons/w_bfg.qc
+//
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/mace/w_mace.md3"})
+= weapon_mace : "Mace" []
+
+
+//
+// entities/lights.qc
+//
+@PointClass
+	base(TargetName)
+	color(.8 .8 .8)
+	size(-8 -8 -8, 8 8 8)
+	model({{
+		model -> {"path": model, "scale": 0.125},
+		         {"path": "tb/info_null.png", "scale": 0.125}
+	}})
+= info_null : "Used as a positional target for light entities to create a spotlight effect. A target_position can be used instead of this but was kept in Q3A for legacy purposes." []
+@PointClass
+	base(TargetName)
+	color(.8 .8 .8)
+	size(-8 -8 -8, 8 8 8)
+	model({{
+		model -> {"path": model, "scale": 0.125},
+		         {"path": "tb/info_notnull.png", "scale": 0.125}
+	}})
+= info_notnull : "Used as a positional target for entities that can use directional pointing. A target_position can be used instead of this but was kept in Q3A for legacy purposes." [
+]
+@PointClass
+	base(Q3Map2Light)
+	color(.65 .65 1)
+	size(-8 -8 -8, 8 8 8)
+	model({"path": "tb/light.png", "scale": "0.125"})
+	model({{
+		_sun == 1         -> {"path": "tb/sun.png", "scale": "0.125"},
+		{"path": "tb/light.png", "scale": "0.125"}
+	}})
+= light : "Non-displayed point light source. The -pointscale and -scale arguments to Q3Map2 affect the brightness of these lights. The -skyscale argument affects brightness of entity sun lights." [
+]
+
+
+//
+// entities/sounds.qc
+//
+@PointClass
+	color(0 1 0)
+	size(-16 -16 -16, 16 16 16)
+	model({"path": "tb/sound.png", "scale": "0.125"})
+= randomsoundbox : "Random Sound Box" [
+	mindelay(float) : "Minimum Delay"
+	maxdelay(float) : "Maximum Delay"
+	noise1(string)
+	noise2(string)
+	noise3(string)
+	noise4(string)
+	noise5(string)
+	noise6(string)
+	noise7(string)
+	noise8(string)
+	noise9(string)
+	noise10(string)
+	noise11(string)
+	noise12(string)
+	noise13(string)
+	noise14(string)
+	noise15(string)
+	rad_sound(float) : "Sound Radius" : "512"
+	rad_sound_inner(float) : : "0" : "inner sound box with no attenuation, default 0"
+	spawnflags(flags) =
+	[
+		32 : "No Spatialize" : 0 : "2D sound only"
+	]
+	volume(float) : "Volume" : "1"
+]
+@PointClass
+	color(0 1 0.2)
+	size(-16 -16 -16, 16 16 16)
+	model({"path": "tb/sound.png", "scale": "0.125"})
+= soundbox : "Sound Box" [
+	rad_sound(integer) : "Sounds Radius" : 512
+	volume(integer) : "Volume" : 1
+	noise(string) : "Noise" : "sound/doors/e1m2_pillar.ogg" : "Sound file to play"
+	delay(float) : "Delay" : "-1"
+	minpitch(float) : "Minimum Pitch" : "0.1"
+	spawnflags(flags) = [
+		1 : "Attenuation 0"
+		2 : "Force Loop"
+		32 : "No Spatialize" : 0 : "2D sound only"
+	]
+]
+
+
+//
+// entities/func/water.qc
+//
+@SolidClass
+	color(0 .4 1)
+= func_water : "Moveable liquid volume" [
+	alpha(float) : "Alpha" : "0.75" : "Transparency of water."
+	colormod(color1) : "Color" : ".5 .5 .5" : "Water surface color, normalized RGB values (0-1, 0-1, 0-1).  Example of blue: .3 .45 .6"
+	cshift(string) : "Underwater Color" : "64 64 64 128" : "Underwater color, RGB Alpha.  Example of blue: 16 32 48 128"
+	deep(integer) : "deep water" : 0 : "Set to 1 if water is placed underwater to prevent physics bugs(default 0)."
+	height_water1(float) : "Height1" : "0" : "Height at which the entity will raise to upon being targeted. Each impulse will raise the entity by X units, until reaching the apex. Cannot be reset. Default value is 0"
+	height_water2(float) : "Height2" : "0" : "Height at which the entity will raise to upon being targeted. Each impulse will raise the entity by X units, until reaching the apex. Cannot be reset. Default value is 0"
+	height_water3(float) : "Height3" : "0" : "Height at which the entity will raise to upon being targeted. Each impulse will raise the entity by X units, until reaching the apex. Cannot be reset. Default value is 0"
+	lip(integer) : "Lip" : 0 : "Lip remaining at end of move. Default value is 0"
+	mangle(vector) : "Mangle" : "0 0 0" : "Add current to the volume. The value is the strength of the push in the X, Y, and Z directions."
+	spawnflags(flags) = [
+		1 : "Start Moved" : 0 : "The water will spawn in the final pos and operate in reverse."
+	]
+	speed(float) : "Move Speed" : "100" : "Determines how fast the water moves (default is 100)."
+	targetname(target_source) : "Target Name" : "" : "If set, a func_button or trigger is required to move the water as a door."
+	watertype(choices) : "Type of liquid" : "-3" = [
+		-3 : "Water"
+		-4 : "Slime"
+		-5 : "Lava"
+	]
+]
+
+
+//
+// entities/func/button.qc
+//
+@SolidClass
+	base(Target)
+	color(0 .4 1)
+= func_button : "When a button is touched by a player, it moves in the direction set by the `angle` key, triggers all its targets, stays pressed by an amount of time set by the `wait` key, then returns to it's original position where it can be operated again." [
+	angle(float) : "Direction" : "0" : "Determines the direction in which the button will move (up = -1, down = -2)."
+	targetname(target_source) : "Target Name" : "" : "If set, other entities can be used to activate the button along with touch or damage way of doing that."
+	speed(float) : "Move Speed" : "50" : "Speed of button's displacement."
+	wait(float) : "Return Delay" : "1" : "Number of seconds button stays pressed (default 1, -1 = no return)."
+	lip(float) : "Lip" : "4" : "Lip remaining at end of move."
+	buttondecal(integer) : "Decal Button" : 0 : "Set to 1 to add extra volume if the brush is a decal."
+]
+
+
+//
+// entities/func/door.qc
+//
+@SolidClass
+	base(Target, TargetName)
+	color(0 .4 1)
+= func_door : "Normal sliding door entity. By default, the door will activate when player walks close to it or when damage is inflicted to it." [
+	angle(float) : "Direction" : "0" : "Determines the opening direction of door (up = -1, down = -2)."
+	attached_model(string) : "Attached Model" : "" : "name of the model attached to the door"
+	dmg(integer) : "Damage Inflicted" : 4 : "Damage to inflict on player when he blocks operation of door (default 4)."
+	fake_lighted(integer) : "Fake Lightning" : 0 : "Set to 1 and brush will use fake lightning."
+	keyrequired(choices) : "Key Required" : 0 : "Key need to open" = [
+		0 : "Unlocked"
+		1 : "Red key"
+		2 : "Blue key required"
+		3 : "Yellow key required"
+	]
+	lip(float) : "Lip" : "0" : "Lip remaining at end of move. Default value is 0"
+	noise(string) : "Noise" : "" : "Sound to play when door opens"
+	notouch(integer) : "No Touch" : 0 : "Set to 1 so player can't activate by `use`, such as when the door is targeted by another entity like a trigger or button."
+	speed(float) : "Move Speed" : "200" : "Determines how fast the door moves (default is around 200)."
+	startnonsolid(integer) : "Starts Non Solid" : 0 : "Set to 1 and brush will be non solid the first second (useful for node graph)."
+	rad_sound(integer) : "Sound Radius" : 512 : ""
+	spawnflags(flags) = [
+		1 : "Start Open" : 0 : "The door will spawn in the open state and operate in reverse."
+	]
+	volume(float) : "Volume" : 1 : ""
+	wait(float) : "Return Delay" : "2" : "Number of seconds before door returns (default 2, -1 = never return)"
+]
+
+
+//
+// entities/func/wall.qc
+//
+@SolidClass
+	color(0 .5 .8)
+= func_wall : "This is just a solid wall if not inhibitted." [
+	displacement(integer) : "Displacement Wall" : 0 : "Set to 1 and brush will be non solid and invisible until a trigger_displacement is used."
+	wait(float) : "Wait" : 1 : ""
+	spawnflags(flags) = [
+		1 : "Start Off"
+		2 : "Glowmod"
+	]
+]
+
+
+//
+// entities/func/ray.qc
+//
+@SolidClass
+	base(TargetName)
+	color(.8 .1 1)
+= func_ray : "An object that fades in and out when triggered" [
+	valpha(color1) : "Alpha Fades" : "0.01 0.75 1" : "Floating-point vector used to define fading in of object: start alpha, end alpha, and time taken to transition."
+	spawnflags(flags) = [
+		1 : "Start Off"
+		2 : "No effects?"
+		512 : "Unknown"
+	]
+]
+
+
+//
+// entities/func/illusionary.qc
+//
+@SolidClass
+	color(0 .5 .8)
+= func_illusionary : "A simple entity that looks solid but lets you walk through it. Does not block light." [
+	spawnflags(flags) = [
+		1 : "Start invisible" : 0 : "When set, the brush will spawn invisible."
+		2 : "Dynamic model light" : 0 : "Force dynamic model light on the entity, even if it's a BSP model (or anything else with lightmaps or light colors)."
+	]
+	targetname(target_source) : "Target Name" : "" : "If set, a func_button or trigger is required to toggle the visibility of the func_illusionary."
+	type(boolean) : "Double-sided" : 0 : "Set to 1 to make the model double-sided."
+	wait(float) : "Wait" : 0 : "Only when starting invisible. Will fade out after this amount of time."
+]
+
+
+//
+// entities/func/train.qc
+//
+@SolidClass
+	color(0 .4 1)
+= func_train : "Trains are moving solids that follow a string of path_corner entities. Trains in Q3A are very basic, they also require an origin brush (see notes)." [
+	color(color1) : "Model Light Color" : "1 1 1" : "ConstantLight color of .md3 model included with entity. Has no effect on the entity's brushes (default 1 1 1)."
+	light(float) : "Model Light Intensity" : "0" : "ConstantLight radius of .md3 model included with entity. Has no effect on the entity's brushes (default 0)."
+	model2(string) : "Model File" : "" : "Path/name of model to include (.md3 files only, e.g. models/mapobjects/pipe/pipe02.md3)."
+	speed(float) : "Move Speed" : "100" : "Speed of displacement of train (default 100 or overridden by speed value of path)."
+	target(target_destination) : "Target" : "" : "This points to the first path_corner of the path which is also the spawn location of the train's origin."
+	targetname(target_source) : "Target Name" : "" : "Used to attach a misc_model entity to this entity."
+	// -------- NOTES --------
+	// 1. Trains always start on in the game.
+	// 2. Trains do not damage the player when blocked.
+	// 3. Trains cannot emit sound.
+	// 4. Trains are not triggerable or toggle-able.
+	// 5. Trains cannot be block-stopped just by getting in their way, the player must be wedged between the train and another obstacle to block it.
+	//
+	// You need to have an origin brush as part of this entity. When using the model2 key, the origin point of the model will correspond to the origin point defined by the origin brush.
+	//
+	// Target this entity with a misc_model to have the model attached to the entity (set the model's "target" key to the same value as this entity's "targetname").
+]
+
+
+//
+// entities/func/flicker.qc
+//
+@SolidClass = func_flicker : "Causes the brush glow texture to flicker" [
+	wait(float) : "Wait" : "0.2" : "time between changes"
+	health(float) : "Health" : "0.6" : "intensity of flicker"
+	style(choices) : "Style" : 0 = [
+		0 : "smooth"
+		1 : "choppy"
+	]
+]
+
+
+//
+// entities/func/shrine.qc
+//
+@SolidClass color(0 .4 1) = func_shrine [
+    targetname(target_source) : "Target Name" : "" : "targetname is required to attach misc_model of shrine."
+]
+
+
+//
+// entities/trigger.qc
+//
+@SolidClass
+	base(Target)
+	color(0.5 0.0 0.5)
+= trigger_multiple : "Variable sized trigger. Triggers multiple times. You must set the key `target` to the name of another object in the level that has a matching `targetname`. If notouch is set, the trigger is only fired by other entities, not by touching. Wait is always -1." [
+	angle(float) : "Facing Direction" : : "if set, the trigger will only fire when someone is facing the direction of the angle, use `360` for angle 0."
+	delay(float) : "Delay" : : "delay before firing (after being triggered)"
+	disarmed(integer) : "Disarmed" : 0 : "It will not fire when player touch, if value = 1 trigger should to be activated"
+	health(boolean) : "Shootable" : "0" : "Can be shot to activate"
+	monstertouch(choices) : "Activable by monster" : 0 = [
+		0 : "monsters will not touch it"
+		1 : "monsters can touch and activate it"
+		2 : "only monsters will touch and activate it"
+	]
+	player_weapon(choices) : "if player has this weapon, make this trigger active,0 = no required weapon" : 0 = [
+		1 : "Coachgun"
+		2 : "Shotgun"
+		4 : "Fang Spitter"
+		8 : "Retcher"
+	]
+	spawnflags(flags) = [
+		1 : "No Touch" : 0 : "only triggered by other entities, not by touching"
+	]
+	wait(float) : "Trigger Wait" : "1" : "Number of seconds before trigger can be activated again."
+]
+@SolidClass
+	base(Target)
+	color(0.5 0.0 0.5)
+= trigger_generic : "Variable sized trigger. Triggers multiple times. You must set the key `target` to the name of another object in the level that has a matching `targetname`. If notouch is set, the trigger is only fired by other entities, not by touching. Wait is always -1." [
+	delay(float) : "Delay" : : "delay before firing (after being triggered)"
+	disarmed(integer) : "Disarmed" : 0 : "it will not fire when player touch, if value = 1 trigger should to be activated"
+	monstertouch(choices) : "Activable by monster" : 0 = [
+		0 : "monsters will not touch it"
+		1 : "monsters can touch and activate it"
+	]
+	player_weapon(choices) : "if player has this weapon, make this trigger active,0 = no required weapon" : 0 = [
+		1 : "Revolver"
+		2 : "Shotgun"
+		4 : "Fang Spitter"
+		8 : "Retcher"
+		16 : "Cannon"
+		32 : "Blade"
+		64 : "Lance"
+		128 : "Crystal"
+		1024 : "Mace"
+	]
+	spawnflags(flags) = [
+		1 : "No Touch" : 0 : "Only triggered by other entities, not by touching"
+	]
+	wait(float) : "Trigger Wait" : "-1" : "Number of seconds before trigger can be activated again. -1 removes after triggering."
+]
+@SolidClass
+	base(Target)
+	color(0.5 0.0 0.5)
+= trigger_once : "Variable sized trigger. Triggers once, then removes itself. You must set the key `target` to the name of another object in the level that has a matching `targetname`. If notouch is set, the trigger is only fired by other entities, not by touching. Wait is always -1." [
+	angle(float) : "Facing Direction" : : "if set, the trigger will only fire when someone is facing the direction of the angle, use `360` for angle 0."
+	delay(float) : "Delay" : : "delay before firing (after being triggered)"
+	disarmed(integer) : "Disarmed" : 0 : "it will not fire when player touch, if value = 1 trigger should to be activated"
+	health(boolean) : "Shootable" : "0" : "can be shot to activate"
+	noise(string) : "Noise" : "" : "Sound to play when triggered."
+	monstertouch(choices) : "Activable by monster" : 0 = [
+		0 : "monsters will not touch it"
+		1 : "monsters can touch and activate it"
+		2 : "only monsters will touch and activate it"
+	]
+	player_weapon(choices) : "if player has this weapon, make this trigger active,0 = no required weapon" : 0 = [
+		1 : "Revolver"
+		2 : "Shotgun"
+		4 : "Fang Spitter"
+		8 : "Retcher"
+		16 : "Cannon"
+		32 : "Blade"
+		64 : "Lance"
+		128 : "Crystal"
+		1024 : "Mace"
+	]
+	respawnable(boolean) : "Restart" : "0" : "Resets trigger so it can be triggered again upon level re-entry"
+	sounds(integer) : "Message Sound" : 0 : "Set to 1 to use default centerprint sound. Otherwise uses noise property."
+	spawnflags(flags) = [
+		1 : "No Touch" : 0 : "only triggered by other entities, not by touching"
+	]
+]
+@PointClass
+	color(0.5 0.0 0.5)
+	size(-8 -8 -8, 8 8 8)
+	model({"path": "tb/trigger_relay.png", "scale": 0.125})
+= trigger_relay : "This fixed size trigger cannot be touched, it can only be fired by other events." [
+	killtarget(string) : "Remove Target" : : "removes target"
+	target(target_destination) : "Target" : : "fires target when triggered"
+	delay(float) : "Delay" : "delay before firing (after being triggered)"
+
+	killtarget2(string) : "Remove Target" : : "removes target2"
+	target2(target_destination) : "Target" : : "fires target2 when triggered"
+	delay2(float) : "Delay" : "delay before firing target2 (after being triggered)"
+
+	killtarget3(string) : "Remove Target" : : "removes target3"
+	target3(target_destination) : "Target" : : "fires target3 when triggered"
+	delay3(float) : "Delay" : "delay before firing target3 (after being triggered)"
+
+	killtarget4(string) : "Remove Target" : : "removes target4"
+	target4(target_destination) : "Target" : : "fires target4 when triggered"
+	delay4(float) : "Delay" : "delay before firing target4 (after being triggered)"
+
+	killtarget5(string) : "Remove Target" : : "removes target5"
+	target5(target_destination) : "Target" : : "fires target5 when triggered"
+	delay5(float) : "Delay" : "delay before firing target5 (after being triggered)"
+
+	killtarget6(string) : "Remove Target" : : "removes target6"
+	target6(target_destination) : "Target" : : "fires target6 when triggered"
+	delay6(float) : "Delay" : "delay before firing target6 (after being triggered)"
+
+	killtarget7(string) : "Remove Target" : : "removes target7"
+	target7(target_destination) : "Target" : : "fires target7 when triggered"
+	delay7(float) : "Delay" : "delay before firing target7 (after being triggered)"
+
+	killtarget8(string) : "Remove Target" : : "removes target8"
+	target8(target_destination) : "Target" : : "fires target8 when triggered"
+	delay8(float) : "Delay" : "delay before firing target8 (after being triggered)"
+
+	message(string) : "Message" : : "displayed when fired"
+	spawnflags(flags) = [
+		1 : "Use once"
+	]
+	targetname(target_source) : "Target Name" : :"The Relay will activate when another entity fires this name."
+]
+@PointClass base(Target, TargetName) color(1 0 1) size(-12 -12 -12, 12 12 12) = trigger_counter : "Acts as an intermediary for an action that takes multiple inputs. If nomessage is not set, it will print `1 more.. ` etc. when triggered and `sequence complete` when finished. After the counter has been triggered `count` times, it will fire all of its targets and remove itself. It's a once-only trigger (i.e. Wait is always -1)." [
+    count(integer) : "Count" : 2 : "number of triggers needed to fire own target, default is 2"
+]
+@SolidClass color(0.5 0.0 0.5) = trigger_turret : "Turn some monsters into turrets." [
+	turret_enemy_visible(float) : "Enemy is Visible" : "0" : "Turret model will be avaible only when player is visible"
+	angle_deviance(float) : "Angle deviance" : "90" : "range of angles at which the monster will behave as a turret (this is both a positive and negative value, default is 90)"
+	target(target_destination) : "Target" : : "if present target info_angle to set y angles"
+]
+@SolidClass
+	base(TargetName)
+	color(0.5 0.0 0.5)
+= trigger_hurt : "Any object touching this will be hurt." [
+	allowoverlap(boolean) : "Overlap" : "0" : "If set to 1, allows overlapping triggers to act as a single trigger"
+	dmg(float) : "Damage Inflicted" : "5" : "sets damage, default is 5"
+	kill_player(boolean) : "Kill Player" : "0" : "Trigger will kill Player"
+	message(string) : "Message" : : "message text"
+	only_to_player(boolean) : "Damage only to Player" : "0" : "Trigger will hurt only Player"
+	wait(float) : "Return Delay" : "1" : "Number of seconds before trigger will hurt again (default 1, -1 = never do damage again)"
+]
+@PointClass color(0.5 0.0 0.5) size(-8 -8 -8, 8 8 8) = trigger_artifact_checker : "This fixed size trigger cannot be touched, it can only be fired by other events." [
+	target(target_destination) : "Target" : : "fires target when player uses selected artifact"
+	type(choices) : "" : "1" : "Artifact used by player that will trigger the entity" = [
+		1 : "Mark Revelation"
+		2 : "Drowner App"
+		3 : "Berseker"
+		4 : "Attar"
+		5 : "Black Grenade"
+		6 : "Life Siphon"
+		7 : "Trinket of Respite"
+		8 : "Cruel Aegis"
+		9 : "Vicious Idol"
+		10 : "Ring of Fire"
+	]
+]
+
+
+//
+// entities/trigger/changelevel.qc
+//
+@SolidClass
+	color(0.5 0.0 0.5)
+= trigger_changelevel : "trigger that will move from one map to the next." [
+	map(string) : "Next Map" : "" : "name of the next map, dont use `.bsp` extension"
+	location(integer) : "Location place" : 0 : "Location place number identifier related to the next map info_player_start."
+]
+
+
+//
+// entities/trigger/wrath.qc
+//
+@SolidClass
+	color(0.5 0.0 0.5)
+= trigger_wrath : "" [
+]
+
+
+//
+// entities/trigger/fly.qc
+//
+@SolidClass color(0.5 0.0 0.5) = trigger_fly : "Sigil of Flight" [
+    duration(float) : "Fly Duration" : "10" : "Number in seconds of the duration of the effect. A value of -1 will stop the flying effect."
+]
+
+
+//
+// entities/trigger/teleport.qc
+//
+@PointClass
+	color(1 .5 .25)
+	size(-16 -16 -32, 16 16 32)
+	model({"path": "models/objects/teleporters/teleporter.md3"})
+= teleporter : "A standard teleporter that transports the player between a pair of linked teleporters.It is both, destination and origin. Using models/objects/teleporter.md3 as model." [
+	angle(float) : "Yaw Angle" : : "Direction in which player will look when teleported."
+	inactive(integer) : "Disarmed" : 0 : "1 Turns the teleporter invisible and inactive, it should be triggered to active it"
+	targetname(target_source) : "Target Name" : : "Make the trigger_teleporter point to this."
+	target(target_destination) : "Target" : : "Targetname of linked teleporter."
+]
+@SolidClass
+	color(0.5 0.0 0.5)
+= trigger_teleport : "Any object touching this will be transported to the corresponding info_teleport_destination entity. You must set the `target` field, and create an object with a `targetname` field that matches." [
+	spawnflags(flags) = [
+		1 : "Player Only" : 0 : "only players will teleport"
+		2 : "Silent" : 0 : "silences teleporting"
+	]
+	target(target_destination) : "Target" : : "name of info_teleport_destination"
+]
+@PointClass
+	color(1 1 1)
+	size(-32 -32 -24, 32 32 16)
+= info_teleport_destination : "Teleport destination location point for trigger_teleporter entities." [
+	angle(float) : "Yaw Angle" : : "Direction in which player will look when teleported."
+	targetname(target_source) : "Target Name" : "" : "Make the trigger_teleporter point to this."
+]
+
+
+//
+// entities/trigger/monsterjump.qc
+//
+@SolidClass
+	color(0.5 0.0 0.5)
+= trigger_monsterjump : "Walking monsters that touch this will jump in the direction of the trigger's angle." [
+	angle(float) : "Direction" : : "angle towards the monster jumps"
+	speed(float) : "Speed" : "200" : "the speed thrown forward. default is 200"
+	height(float) : "Height" : "200" : "the speed thrown upwards. default is 200"
+	viewer_deviance(float) : "Angles Deviance" : "0" : "if value is > 0, trigger will work if enemy of monster is infront of the trigger, the angles are the value of the `infront` value, 120 is a regular value"
+	count(integer) : "Count" : 0 : "if value is > 0 number of uses avaible for the trigger"
+	type(integer) : "Type" : 0 : "1 = trigger will work only if enemy is under the monster, 2 = trigger will work only if enemy is above the monster"
+]
+
+
+//
+// entities/trigger/displacement.qc
+//
+@SolidClass
+	color(0.5 0.0 0.5)
+= trigger_displacement : "Sigil of Displacement" [
+	duration(float) : "Displacement Duration" : "10" : "Number in seconds of the duration of the effect."
+	noise(string) : "Noise" : "objects/pylon_loop.ogg" : "Sound emitted by the trigger"
+	rad_sound(integer) : "Sound Radius" : 512 : ""
+]
+
+
+//
+// entities/trigger/shrine.qc
+//
+@SolidClass color(0.5 0.0 0.5) = trigger_shrine : "Shrine trigger." []
+
+
+//
+// entities/trigger/secret.qc
+//
+@SolidClass color(0.5 0.0 0.5) = trigger_secret : "Secret counter trigger." []
+
+
+//
+// entities/entity_model.qc
+//
+@PointClass
+	color(1 .5 .25)
+	size(-16 -16 -16, 16 16 16)
+	model({"path": model})
+= place_model : "Generic placeholder for inserting MD3 models in game. Doesnt require compilation of map geometry to be added to level." [
+	model(string) : "Model File" : : "Path/name of model to use (e.g. models/mapobjects/teleporter/teleporter.md3)."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	scale(float) : "Uniform Scale" : "1" : "Floating-point value used to scale a model up or down (default 1.0)."
+	spawnflags(flags) = [
+		1 : "Check Owner"
+		2 : "Boat"
+	]
+	target(target_destination) : "Target" : : "Attach to this entity"
+]
+@PointClass
+	color(0 1 1)
+	size(-4 -4 -8, 4 4 8)
+	model({{
+		episode == 1 -> {"path": "models/objects/fixtures/torch1.md3"},
+		episode == 2 -> {"path": "models/objects/fixtures/e2_torch.md3"},
+		episode == 3 -> {"path": "models/objects/fixtures/e3_torch.md3"},
+		episode == 4 -> {"path": "models/objects/fixtures/e2_torch_2.md3"},
+		"models/objects/fixtures/torch1.md3"
+	}})
+= object_torch1 : "flamey wall torch" [
+	episode(choices) : "Episode" : 1 = [
+		1 : "Episode 1"
+		2 : "Episode 2"
+		3 : "Episode 3"
+		4 : "Episode 4"
+	]
+	skin(integer) : "Alternate" : 1 : "(ALTERNATE) uses an alternate flame pattern and sound effect.  Use this every other torch placement to reduce syncing of sound/animation of multiple visible torches"
+]
+@PointClass model("models/objects/fixtures/e2_torch.md3") = object_torch2 []
+@PointClass model("models/objects/fixtures/e2_torch_2.md3") = object_torch2b []
+@PointClass
+	color(.8 .6 .4)
+	size(-8 -8 -8, 8 8 8)
+	model({"path": model, "scale": scale})
+= place_modelb : "Places a model on the gound" [
+	model(string) : "Model" : : ""
+	scale(float) : "Scale" : : ""
+]
+
+
+//
+// entities/object_eyeball.qc
+//
+@PointClass
+	size(-64 -64 -64 , 64 64 64)
+	model({{
+		model -> model, "models/objects/eyeball.md3"
+	}})
+= object_eyeball : "A giant eyeball that tracks the player and can be shot" []
+
+
+//
+// entities/object_fire1.qc
+//
+@PointClass size(-4 -4 -8, 4 4 8) model({"path": "models/objects/fixtures/fire1.md3"}) = object_fire1 : "fire" [
+	skin(integer) : "Skin" : 0
+	spawnflags(flags) = [
+		1 : "No hurt"
+	]
+]
+
+
+//
+// entities/breakables.qc
+//
+@BaseClass = breakable_loot [
+	urn_health(choices) : "Lifeblood" : 0 = [
+		1 : "Vial of Lifeblood"
+		2 : "Beaker of Lifeblood"
+		3 : "Chalice of Lifeblood"
+	]
+	urn_armor(choices) : "Armor" : 0 = [
+		1 : "Armor"
+		2 : "Armor Shard"
+		3 : "Helm"
+		4 : "Dark Armor"
+		5 : "Dark Armor Shard"
+		6 : "Dark Helm"
+	]
+	urn_ammo(choices) : "Ammo" : 0 = [
+		1 : "Slugs"
+		2 : "Shells"
+		3 : "Fangs"
+		4 : "Cysts"
+		5 : "Ore"
+		6 : "Plasma"
+		7 : "Crystals"
+		8 : "Souls"
+	]
+	urn_artifacts(choices) : "Artifacts" : 0 = [
+		1  : "Mark of Revelation"
+		2  : "Drowner's Apparatus"
+		3  : "Flask of Rage"
+		4  : "Confounding Attar"
+		5  : "Soul Tether"
+		6  : "Life Siphon"
+		7  : "Orb of Deflection"
+		8  : "Cruel Aegis"
+		9  : "Vicious Animus"
+		10 : "Shockwave"
+		11 : "Void Grenade"
+	]
+]
+@BaseClass base(breakable_loot) = breakable_urn [
+	episode(integer) : "Episode" : 0 : "Defaults to the world/level episode"
+	health(integer) : "Health" : 10 : ""
+	skin(integer) : "Skin" : 0 : ""
+]
+@PointClass
+	base(breakable_urn)
+	color(0 1 1)
+	size(-12 -12 0, 12 12 32)
+	model("models/destruct/urns/urn32.md3")
+= breakable_urn_small : "small urn" []
+@PointClass
+	base(breakable_urn)
+	color(0 1 1)
+	size(-16 -16 0, 16 16 48)
+	model("models/destruct/urns/urn48.md3")
+= breakable_urn_medium : "medium urn" []
+@PointClass
+	base(breakable_urn)
+	color(0 1 1)
+	size(-16 -16 -0, 16 16 64)
+	model("models/destruct/urns/urn64.md3")
+= breakable_urn_large : "large urn" []
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		type == 1 -> {"path": "models/destruct/skulls/b_skull1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/b_skull2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/b_skull3.md3"},
+		type == 4 -> {"path": "models/destruct/skulls/b_skull4.md3"},
+		type == 5 -> {"path": "models/destruct/skulls/b_skull5.md3"},
+		type == 6 -> {"path": "models/destruct/skulls/b_skull6.md3"},
+		type == 7 -> {"path": "models/destruct/skulls/b_skull7.md3"},
+		type == 8 -> {"path": "models/destruct/skulls/b_skull8.md3"},
+		"models/destruct/skulls/b_skull1.md3"
+	}})
+= breakable_skull : "Skull breakable prop, medium and large." [
+	model(string) : "Model File" : "models/destruct/skulls/b_skull1.md3" : "Path/name of model to use"
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Nostrilsaurus"
+		2 : "Predalike"
+		3 : "Cyclops"
+		4 : "Minotaur LARGE"
+		5 : "Sharpie"
+		6 : "Goatman"
+		7 : "Grinner"
+		8 : "Toothhound"
+	]
+]
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		(spawnflags & 4) != 0 -> {"path": "models/destruct/skulls/skull_a1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/skull_a2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_a3.md3"},
+		type == 4 -> {"path": "models/destruct/skulls/skull_a4.md3"},
+		type == 5 -> {"path": "models/destruct/skulls/skull_a5.md3"},
+		type == 6 -> {"path": "models/destruct/skulls/skull_a6.md3"},
+		type == 7 -> {"path": "models/destruct/skulls/skull_a7.md3"},
+		type == 8 -> {"path": "models/destruct/skulls/skull_a8.md3"},
+		type == 9 -> {"path": "models/destruct/skulls/skull_a9.md3"},
+		type == 10 -> {"path": "models/destruct/skulls/skull_a10.md3"},
+		"models/destruct/skulls/skull_a1.md3"
+	}})
+= breakable_skull_small_a : "Skull breakable prop, small humanoid." [
+	model(string) : "Model File" : "models/destruct/skulls/skull_a1.md3" : "Path/name of model to use"
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Random"
+		2 : "Skull a2"
+		3 : "Skull a3"
+		4 : "Skull a4"
+		5 : "Skull a5"
+		6 : "Skull a6"
+		7 : "Skull a7"
+		8 : "Skull a8"
+		9 : "Skull a9"
+		10 : "Skull a10"
+	]
+	spawnflags(flags) = [
+		4 : "Skull a1"
+	]
+]
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		type == 1 -> {"path": "models/destruct/skulls/skull_b1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/skull_b2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_b3.md3"},
+		type == 4 -> {"path": "models/destruct/skulls/skull_b4.md3"},
+		type == 5 -> {"path": "models/destruct/skulls/skull_b5.md3"},
+		type == 6 -> {"path": "models/destruct/skulls/skull_b6.md3"},
+		"models/destruct/skulls/skull_b1.md3"
+	}})
+= breakable_skull_small_b : "Skull breakable prop, small humanoid." [
+	health(integer) : "Health" : 10
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Skull b1"
+		2 : "Skull b2"
+		3 : "Skull b3"
+		4 : "Skull b4"
+		5 : "Skull b5"
+		6 : "Skull b6"
+	]
+]
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		type == 1 -> {"path": "models/destruct/skulls/skull_c1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/skull_c2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_c3.md3"},
+		"models/destruct/skulls/skull_c1.md3"
+	}})
+= breakable_skull_small_c : "Skull breakable prop, small humanoid." [
+	health(integer) : "Health" : 10
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Skull c1"
+		2 : "Skull c2"
+		3 : "Skull c3"
+	]
+]
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		type == 1 -> {"path": "models/destruct/skulls/skull_d1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/skull_d2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_d3.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_d4.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_d5.md3"},
+		"models/destruct/skulls/skull_d1.md3"
+	}})
+= breakable_skull_small_d : "Skull breakable prop, small humanoid." [
+	health(integer) : "Health" : 10
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Skull d1"
+		2 : "Skull d2"
+		3 : "Skull d3"
+		4 : "Skull d4"
+		5 : "Skull d5"
+	]
+]
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		type == 1 -> {"path": "models/destruct/skulls/skull_e1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/skull_e2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_e3.md3"},
+		type == 4 -> {"path": "models/destruct/skulls/skull_e4.md3"},
+		type == 5 -> {"path": "models/destruct/skulls/skull_e5.md3"},
+		type == 6 -> {"path": "models/destruct/skulls/skull_e6.md3"},
+		type == 7 -> {"path": "models/destruct/skulls/skull_e7.md3"},
+		type == 8 -> {"path": "models/destruct/skulls/skull_e8.md3"},
+		"models/destruct/skulls/skull_e1.md3"
+	}})
+= breakable_skull_small_e : "Skull breakable prop, small humanoid." [
+	health(integer) : "Health" : 10
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Skull e1"
+		2 : "Skull e2"
+		3 : "Skull e3"
+		4 : "Skull e4"
+		5 : "Skull e5"
+		6 : "Skull e6"
+		7 : "Skull e7"
+		8 : "Skull e8"
+	]
+]
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		type == 1 -> {"path": "models/destruct/skulls/skull_f1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/skull_f2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_f3.md3"},
+		type == 4 -> {"path": "models/destruct/skulls/skull_f4.md3"},
+		type == 5 -> {"path": "models/destruct/skulls/skull_f5.md3"},
+		type == 6 -> {"path": "models/destruct/skulls/skull_f6.md3"},
+		type == 7 -> {"path": "models/destruct/skulls/skull_f7.md3"},
+		"models/destruct/skulls/skull_f1.md3"
+	}})
+= breakable_skull_small_f : "Skull breakable prop, small humanoid." [
+	health(integer) : "Health" : 10
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Skull f1"
+		2 : "Skull f2"
+		3 : "Skull f3"
+		4 : "Skull f4"
+		5 : "Skull f5"
+		6 : "Skull f6"
+		7 : "Skull f7"
+	]
+]
+
+
+//
+// entities/ammo/cannon.qc
+//
+@PointClass
+	size(-16 -16 -11, 16 16 19)
+	model({"path": "models/items/ammo_cannon.md3"})
+= ammo_cannon : "5 Cannon ammo." []
+
+
+//
+// entities/ammo/crystal.qc
+//
+@PointClass
+	size(-16 -16 -8, 16 16 16)
+	model({"path": "models/items/ammo_crystal.md3"})
+= ammo_crystal : "50 Crystal ammo." []
+
+
+//
+// entities/ammo/lance.qc
+//
+@PointClass
+	size(-16 -16 -8, 16 16 8)
+	model({"path": "models/items/ammo_lance.md3"})
+= ammo_lance : "5 Lance ammo." []
+
+
+//
+// entities/ammo/mace.qc
+//
+@PointClass
+	size(-16 -16 -6, 16 16 6)
+	model({"path": "models/weapons/mace/soul.md3"})
+= ammo_mace : "10 Mace ammo." [
+	count(integer) : "Count" : 1 : "Number of souls to create"
+]
+
+
+//
+// entities/ammo/retcher.qc
+//
+@PointClass size(-16 -16 -6, 16 16 6) model({"path": "models/items/ammo_retcher.md3"}) = ammo_retcher : "3 Retcher ammo." []
+
+
+//
+// entities/ammo/revolver.qc
+//
+@PointClass size(-16 -16 -6, 16 16 6) model({"path": "models/items/ammo_revolver.md3"}) = ammo_revolver : "15 Coach Gun ammo." []
+
+
+//
+// entities/ammo/shotgun.qc
+//
+@PointClass size(-16 -16 -6, 16 16 6) model({"path": "models/items/ammo_shotgun.md3"}) = ammo_shotgun : "20 Shotgun ammo." []
+
+
+//
+// entities/ammo/spitter.qc
+//
+@PointClass size(-16 -16 -6, 16 16 6) model({"path": "models/items/ammo_spitter.md3"}) = ammo_spitter : "15 Spitter ammo." []
+
+
+//
+// entities/artifact/aegis.qc
+//
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_aegis.md3"})
+= artifact_aegis : "Artifact: Cruel Aegis ( 1 health point invulnerability )" []
+
+
+//
+// entities/artifact/animus.qc
+//
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_animus.md3"})
+= artifact_animus : "Artifact: Vicious Animus ( bone turret )" []
+
+
+//
+// entities/artifact/apparatus.qc
+//
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_apparatus.md3"})
+= artifact_apparatus : "Drowner's Apparatus ( swimming breather )" []
+
+
+//
+// entities/artifact/attar.qc
+//
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_attar.md3"})
+= artifact_attar : "Artifact: Confounding Attar ( monster infighting potion )" []
+
+
+//
+// entities/artifact/deflection.qc
+//
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_deflection.md3"})
+= artifact_deflection : "Artifact: Orb of Deflection ( static golden forcefield )" []
+
+
+//
+// entities/artifact/grenade.qc
+//
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_grenade.md3"})
+= artifact_grenade : "Artifact: Void Grenade ( black hole bomb )" []
+
+
+//
+// entities/artifact/rage.qc
+//
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_rage.md3"})
+= artifact_rage : "Artifact: Flask of Rage ( quin damage )" []
+
+
+//
+// entities/artifact/revelation.qc
+//
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_revelation.md3"})
+= artifact_revelation : "Artifact: Mark Of Revelation ( shows all secrets in the map )" []
+
+
+//
+// entities/artifact/shockwave.qc
+//
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_shockwave.md3"})
+= artifact_shockwave : "Artifact: Shockwave ( electric ring )" []
+
+
+//
+// entities/artifact/siphon.qc
+//
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_siphon.md3"})
+= artifact_siphon : "Artifact: Life Siphon ( heart healer )" []
+
+
+//
+// entities/artifact/tether.qc
+//
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/soul_tether.md3"})
+= item_tether : "Soul Tether ( save item )" []
+
+
+//
+// entities/items.qc
+//
+@PointClass
+	base(Weapon)
+	color(0 1 1)
+	size(-16 -16 0, 16 16 64)
+= weapon_spawner : "Spawn weapons entity" [
+	classweapon1(choices) : "Encounter 1 Weapon, 0 relics" : 1 = [
+		1 : "Revolver"
+		2 : "Shotgun"
+		3 : "Fang Spitter"
+		4 : "Retcher"
+		5 : "Slag Cannon"
+		6 : "Lance"
+		7 : "Crystaliser"
+		8 : "Mace"
+	]
+	classweapon2(choices) : "Encounter 2 Weapon, 1 relics" : 1 = [
+		1 : "Revolver"
+		2 : "Shotgun"
+		3 : "Fang Spitter"
+		4 : "Retcher"
+		5 : "Slag Cannon"
+		6 : "Lance"
+		7 : "Crystaliser"
+		8 : "Mace"
+	]
+	classweapon3(choices) : "Encounter 3 Weapon, 2 relics" : 1 = [
+		1 : "Revolver"
+		2 : "Shotgun"
+		3 : "Fang Spitter"
+		4 : "Retcher"
+		5 : "Slag Cannon"
+		6 : "Lance"
+		7 : "Crystaliser"
+		8 : "Mace"
+	]
+	classweapon4(choices) : "Encounter 4 Weapon, 3 relics" : 1 = [
+		1 : "Revolver"
+		2 : "Shotgun"
+		3 : "Fang Spitter"
+		4 : "Retcher"
+		5 : "Slag Cannon"
+		6 : "Lance"
+		7 : "Crystaliser"
+		8 : "Mace"
+	]
+	classweapon5(choices) : "Encounter 5 Weapon, 4 relics" : 1 = [
+		1 : "Revolver"
+		2 : "Shotgun"
+		3 : "Fang Spitter"
+		4 : "Retcher"
+		5 : "Slag Cannon"
+		6 : "Lance"
+		7 : "Crystaliser"
+		8 : "Mace"
+	]
+	target(target_destination) : "Target" : : "Target for the spawned weapons."
+	targetname(target_source) : "Target Name" : : "A func_button or trigger is required to activate it."
+	delay(float) : "Delay"
+]
+@PointClass color(1 0.5 0) size(-8 -8 -16, 8 8 16) = item_spawner : "Spawn items entity" [
+    classitem1(choices) : "encounter 1: 0 relics" : 1 = [
+        1 : "Soul Tether"
+
+        2 : "Slugs ( Revolver )"
+        3 : "Shells ( Shotgun )"
+        4 : "Fangs ( Spitter )"
+        5 : "Cysts ( Retcher )"
+        6 : "Ore ( Slag Cannon )"
+        7 : "Spore ( Lance )"
+        8 : "Crystals"
+        9 : "Mace"
+
+        10 : "Health Vial"
+        11 : "Health Beaker"
+        12 : "Health Chalice"
+        13 : "Armor Shard"
+        14 : "Armor Body"
+        15 : "Armor Helm"
+        16 : "Dark Armor Shard"
+        17 : "Dark Armor Body"
+        18 : "Dark Armor Helm"
+
+        21 : "Mark of Revelation"
+        22 : "Drowners Apparatus"
+        23 : "Flask Of Rage"
+        24 : "Confounding Attar"
+        25 : "Void Grenade"
+        26 : "Artifact Siphon"
+        27 : "Orb Of Deflection"
+        28 : "Cruel Aegis"
+        29 : "Vicious Animus"
+        30 : "Shockwave"
+    ]
+    classitem2(choices) : "encounter 2: 1 relics" : 1 = [
+        1 : "Soul Tether"
+
+        2 : "Slugs ( Revolver )"
+        3 : "Shells ( Shotgun )"
+        4 : "Fangs ( Spitter )"
+        5 : "Cysts ( Retcher )"
+        6 : "Ore ( Slag Cannon )"
+        7 : "Spore ( Lance )"
+        8 : "Crystals"
+        9 : "Mace"
+
+        10 : "Health Vial"
+        11 : "Health Beaker"
+        12 : "Health Chalice"
+        13 : "Armor Shard"
+        14 : "Armor Body"
+        15 : "Armor Helm"
+        16 : "Dark Armor Shard"
+        17 : "Dark Armor Body"
+        18 : "Dark Armor Helm"
+
+        21 : "Mark of Revelation"
+        22 : "Drowners Apparatus"
+        23 : "Flask Of Rage"
+        24 : "Confounding Attar"
+        25 : "Void Grenade"
+        26 : "Artifact Siphon"
+        27 : "Orb Of Deflection"
+        28 : "Cruel Aegis"
+        29 : "Vicious Animus"
+        30 : "Shockwave"
+    ]
+    classitem3(choices) : "encounter 3: 2 relics" : 1 = [
+        1 : "Soul Tether"
+
+        2 : "Slugs ( Revolver )"
+        3 : "Shells ( Shotgun )"
+        4 : "Fangs ( Spitter )"
+        5 : "Cysts ( Retcher )"
+        6 : "Ore ( Slag Cannon )"
+        7 : "Spore ( Lance )"
+        8 : "Crystals"
+        9 : "Mace"
+
+        10 : "Health Vial"
+        11 : "Health Beaker"
+        12 : "Health Chalice"
+        13 : "Armor Shard"
+        14 : "Armor Body"
+        15 : "Armor Helm"
+        16 : "Dark Armor Shard"
+        17 : "Dark Armor Body"
+        18 : "Dark Armor Helm"
+
+        21 : "Mark of Revelation"
+        22 : "Drowners Apparatus"
+        23 : "Flask Of Rage"
+        24 : "Confounding Attar"
+        25 : "Void Grenade"
+        26 : "Artifact Siphon"
+        27 : "Orb Of Deflection"
+        28 : "Cruel Aegis"
+        29 : "Vicious Animus"
+        30 : "Shockwave"
+    ]
+    classitem4(choices) : "encounter 4: 3 relics" : 1 = [
+        1 : "Soul Tether"
+
+        2 : "Slugs ( Revolver )"
+        3 : "Shells ( Shotgun )"
+        4 : "Fangs ( Spitter )"
+        5 : "Cysts ( Retcher )"
+        6 : "Ore ( Slag Cannon )"
+        7 : "Spore ( Lance )"
+        8 : "Crystals"
+        9 : "Mace"
+
+        10 : "Health Vial"
+        11 : "Health Beaker"
+        12 : "Health Chalice"
+        13 : "Armor Shard"
+        14 : "Armor Body"
+        15 : "Armor Helm"
+        16 : "Dark Armor Shard"
+        17 : "Dark Armor Body"
+        18 : "Dark Armor Helm"
+
+        21 : "Mark of Revelation"
+        22 : "Drowners Apparatus"
+        23 : "Flask Of Rage"
+        24 : "Confounding Attar"
+        25 : "Void Grenade"
+        26 : "Artifact Siphon"
+        27 : "Orb Of Deflection"
+        28 : "Cruel Aegis"
+        29 : "Vicious Animus"
+        30 : "Shockwave"
+    ]
+    classitem5(choices) : "encounter 5: 4 relics" : 1 = [
+        1 : "Soul Tether"
+
+        2 : "Slugs ( Revolver )"
+        3 : "Shells ( Shotgun )"
+        4 : "Fangs ( Spitter )"
+        5 : "Cysts ( Retcher )"
+        6 : "Ore ( Slag Cannon )"
+        7 : "Spore ( Lance )"
+        8 : "Crystals"
+        9 : "Mace"
+
+        10 : "Health Vial"
+        11 : "Health Beaker"
+        12 : "Health Chalice"
+        13 : "Armor Shard"
+        14 : "Armor Body"
+        15 : "Armor Helm"
+        16 : "Dark Armor Shard"
+        17 : "Dark Armor Body"
+        18 : "Dark Armor Helm"
+
+        21 : "Mark of Revelation"
+        22 : "Drowners Apparatus"
+        23 : "Flask Of Rage"
+        24 : "Confounding Attar"
+        25 : "Void Grenade"
+        26 : "Artifact Siphon"
+        27 : "Orb Of Deflection"
+        28 : "Cruel Aegis"
+        29 : "Vicious Animus"
+        30 : "Shockwave"
+    ]
+    checkweapon(integer) : "Check Weapon" : 0 : "Remove if relative weapon is not present (only valid for ammo)"
+    item_ammount(integer) : "Amount of ammo, only replace this to change default values (ammo only)" : 0 : "number of ammo ammount"
+    target(target_destination) : "Target" : : "Target for the spawned items."
+    targetname(target_source) : "Target Name" : : "A func_button or trigger is required to activate it."
+]
+@BaseClass
+	color(1 0 0)
+	size(-8 -8 -48, 8 8 0)
+= Key : "" [
+	episode(choices) : "Episode" : 1 = [
+		1 : "Episode 1"
+		2 : "Episode 2"
+		3 : "Episode 3"
+	]
+]
+@PointClass
+	base(Key)
+	model({{
+		episode == 1 -> {"path": "models/keys/key_1_coffer.md3"},
+		episode == 2 -> {"path": "models/keys/key_2_coffer.md3"},
+		episode == 3 -> {"path": "models/keys/key_3_coffer.md3"},
+		"models/keys/key_1_coffer.md3"
+	}})
+= key_coffer : "" []
+@PointClass
+	base(Key)
+	model({{
+		episode == 1 -> {"path": "models/keys/key_1_red.md3"},
+		episode == 2 -> {"path": "models/keys/key_2_red.md3"},
+		episode == 3 -> {"path": "models/keys/key_3_red.md3"},
+		"models/keys/key_1_red.md3"
+	}})
+= key_red : "" []
+@PointClass
+	base(Key)
+	model({{
+		episode == 1 -> {"path": "models/keys/key_1_blue.md3"},
+		episode == 2 -> {"path": "models/keys/key_2_blue.md3"},
+		episode == 3 -> {"path": "models/keys/key_3_blue.md3"},
+		"models/keys/key_1_blue.md3"
+	}})
+= key_blue : "" []
+@PointClass
+	base(Key)
+	model({{
+		episode == 1 -> {"path": "models/keys/key_1_yellow.md3"},
+		episode == 2 -> {"path": "models/keys/key_2_yellow.md3"},
+		episode == 3 -> {"path": "models/keys/key_3_yellow.md3"},
+		"models/keys/key_1_yellow.md3"
+	}})
+= key_yellow : "" []
+@BaseClass color(0.7 0.7 0.7) size(-12 -12 -48, 12 12 0) model("models/items/relic.md3") = relic []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_intro.tga") = relic_intro : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e1m1.tga") = relic_e1m1 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e1m2.tga") = relic_e1m2 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e1m3.tga") = relic_e1m3 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e1m4.tga") = relic_e1m4 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e1m5.tga") = relic_e1m5 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e2m1.tga") = relic_e2m1 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e2m2.tga") = relic_e2m2 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e2m3.tga") = relic_e2m3 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e2m4.tga") = relic_e2m4 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e2m5.tga") = relic_e2m5 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e3m1.tga") = relic_e3m1 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e3m2.tga") = relic_e3m2 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e3m3.tga") = relic_e3m3 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e3m4.tga") = relic_e3m4 : "" []
+@PointClass base(relic) model("gfx/hud/messages/icons/msgicon_relic_e3m5.tga") = relic_e3m5 : "" []
+@PointClass
+	base(TargetName)
+	color(.8 .8 .4)
+	size(-8 -8 0, 8 8 6)
+	model({"path": "models/items/item_readable.md3"})
+= item_readable : "Lore Scroll" [
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	note(integer) : "Note number." : 0 : "Number of note file, containing flavour text."
+]
+@PointClass model("models/projectiles/proj_cyst.md3") = cannon_item : "Just a debugging/test item" []
+@PointClass
+	color(0.5 0.6 0.5)
+	size(-12 -12 -16, 12 12 16)
+= item_donor : "Gives items to the player when the map is loaded." [
+	fweapon_revolver(integer) : "Revolver" : 0
+	fweapon_shotgun(integer) : "Shotgun" : 0
+	fweapon_spitter(integer) : "Fang Spitter" : 0
+	fweapon_retcher(integer) : "Retcher" : 0
+	fweapon_cannon(integer) : "Slag Cannon" : 0
+	fweapon_lance(integer) : "Lance" : 0
+	fweapon_crystal(integer) : "Crystalliser" : 0
+	fweapon_mace(integer) : "Mace" : 0
+
+	ammo_revolver(integer) : "Ammo Revolver" : 0
+	ammo_shotgun(integer) : "Ammo Shotgun" : 0
+	ammo_spitter(integer) : "Ammo Spitter" : 0
+	ammo_retcher(integer) : "Ammo Retcher" : 0
+	ammo_cannon(integer) : "Ammo SlagCannon" : 0
+	ammo_lance(integer) : "Ammo Lance" : 0
+	ammo_crystal(integer) : "Ammo Crystalliser" : 0
+	ammo_mace(integer) : "Ammo Mace" : 0
+
+	health(integer) : "Health" : 0
+	rarmorvalue(integer) : "Armor Value" : 0
+	darmorvalue(integer) : "Dark Armor Value" : 0
+
+	SoulTether(integer) : "Soul Tether" : 0
+	LifeSiphon(integer) : "Life Siphon" : 0
+	OrbOfDeflection(integer) : "Orb Of Deflection" : 0
+	Attar(integer) : "Confounding Attar" : 0
+	Aegis(integer) : "Cruel Aegis" : 0
+	FlaskOfRage(integer) : "Flask Of Rage" : 0
+	DrownerApp(integer) : "Drowner's Apparatus" : 0
+	MarkRevelation(integer) : "Mark of Revelation" : 0
+	VoidGrenade(integer) : "Void Grenade" : 0
+	ViciousIdol(integer) : "Vicious Idol" : 0
+	ShockWave(integer) : "Shockwave" : 0
+]
+@PointClass base(item_donor) color(0.5 0.7 0.5) size(-12 -12 -16, 12 12 16) = item_donor_map : "Gives items to the player when the map is loaded via 'map' console command." []
+
+
+//
+// entities/health.qc
+//
+@PointClass color(1 0 0) size(-16 -16 -24, 16 16 24) model("models/items/lifeblood_vial.md3") = health_life_vial : "Vial of Lifeblood" []
+@PointClass color(1 0 0) size(-16 -16 -24, 16 16 24) model("models/items/lifeblood_beaker.md3") = health_life_beaker : "Beaker of Lifeblood" []
+@PointClass color(1 0 0) size(-16 -16 -24, 16 16 24) model("models/items/lifeblood_chalice.md3") = health_life_chalice : "Chalice of Lifeblood" []
+
+
+//
+// entities/armor.qc
+//
+@PointClass size(-16 -16 -8, 16 16 2) model("models/items/armor_shard.md3") = armor_shard : "10 regular armor" []
+@PointClass size(-16 -16 -8, 16 16 8) model("models/items/helm.md3") = armor_helm : "" []
+@PointClass size(-16 -16 -8, 16 16 20) model("models/items/armor.md3") = armor_armor : "" []
+@PointClass size(-16 -16 -8, 16 16 2) model("models/items/armor_shard_dark.md3") = armor_shard_dark : "" []
+@PointClass size(-16 -16 -8, 16 16 20) model("models/items/armor_dark.md3") = armor_armor_dark : "" []
+@PointClass size(-16 -16 -8, 16 16 8) model("models/items/helm_dark.md3") = armor_helm_dark : "" []
+
+
+//
+// entities/func/destruct.qc
+//
+@SolidClass base(Target) color(0 .4 1) = func_destruct : "brush entity then can be destroyed by player" [
+    health(float) : "Health" : "10" : "Health of the func."
+    min_damage(float) : "Minimun damage needed to destroy in a single hit" : "0" : "Minimum damage needed in a single hit."
+    gibcount(float) : "Gib Count" : "4" : "Amount of gibs (default 4)."
+    bouncefactor(float) : "Bounce" : "0.25" : "Bounciness of debris (default 0.25)."
+    particlename(string) : "Particles" : "" : "Name of particles (found in effectinfo.txt)"
+    startnonsolid(integer) : "Starts Non Solid" : 0 : "Set to 1 and brush will be non solid the first second (useful for node graph)."
+    mass(float) : "Mass" : "0.75" : "Weight of debris (default 0.75)."
+    noise(string) : "Sound Effect" : "sound/impact/destruct/" : ""
+    base_scale(float) : "Gib Scale" : "1" : "Scales size of gibs. `-1` is no scaling applied."
+    type(choices) : "Material Type" : 0 = [
+        0 : "Custom (enables custom debris models)"
+        1 : "Stone"
+        2 : "Wood"
+        3 : "Metal"
+        4 : "Glass"
+        5 : "Ice"
+    ]
+    gibmodel1(string) : "Debris Model A" : "models/destruct/" : "Custom derbis model A"
+    gibmodel2(string) : "Debris Model B" : "models/destruct/" : "Custom derbis model B"
+    gibmodel3(string) : "Debris Model V" : "models/destruct/" : "Custom derbis model C"
+    rad_sound(float) : "Sound Radius" : "256" : "Radius of destruction sounds."
+    volume(float) : "Sound Volume" : "1" : "Volume of destruction sounds."
+    spread_vel(float) : "Spread Factor" : "0" : "Spread Factor."
+    only_damage_monster(float) : "Monster Damage" : "0" : "Can be destroyed only by monsters."
+    touch_smash(choices) : "Touch Destruction" : 0 = [
+        0 : "No Touch Destruction"
+        1 : "Can be destroyed if touched by Player"
+        2 : "Can be destroyed if touched by Monsters"
+        3 : "Can be destroyed if touched by Player and Monsters"
+    ]
+    touch_smash_delay(float) : "Touch Destruction Delay" : "0" : "(delay before be destroyed if touch destruction is enabled)"
+]
+@PointClass
+	base(Target, TargetName)
+	color(1 .5 .25)
+	size(-16 -16 -16, 16 16 16)
+	model(model)
+= model_destruct : "Explodes in a shower of gibs when damaged." [
+	model(string) : "Model File" : : "Path/name of model to use (e.g. models/mapobjects/teleporter/teleporter.md3)."
+	health(float) : "Health" : "10" : "Health of the model."
+	gibcount(float) : "Gib Count" : "4" : "Amount of gibs (default 4)."
+	bouncefactor(float) : "Bounce" : "0.25" : "Bounciness of debris (default 0.25)."
+	particlename(string) : "Particles" : : "Name of particles (found in effectinfo.txt)"
+	startnonsolid(boolean) : "Starts Non Solid" : "0" : "Set to 1 and brush will be non solid the first second (useful for node graph)."
+	mass(float) : "Mass" : "0.75" : "Weight of debris (default 0.75)."
+	noise(string) : "Sound Effect" : "sound/impact/destruct/" : ""
+	base_scale(float) : "Gib Scale" : "1" : "Scales size of gibs. `-1` is no scaling applied."
+	type(choices) : "Material Type" : 0 = [
+		0 : "Custom (enables custom debris models)"
+		1 : "Stone"
+		2 : "Wood"
+		3 : "Metal"
+		4 : "Glass"
+		5 : "Ice"
+	]
+	gibmodel1(string) : "Debris Model A" : "models/destruct/" : "Custom derbis model A"
+	gibmodel2(string) : "Debris Model B" : "models/destruct/" : "Custom derbis model B"
+	gibmodel3(string) : "Debris Model V" : "models/destruct/" : "Custom derbis model C"
+	rad_sound(float) : "Sound Radius" : "256" : "Radius of destruction sounds."
+	volume(float) : "Sound Volume" : "1" : "Volume of destruction sounds."
+	spread_vel(float) : "Spread Factor" : "0" : "Spread Factor."
+	only_damage_monster(boolean) : "Monster Damage" : "0" : "Can be destroyed only by monsters."
+	touch_smash(choices) : "Touch Destruction" : 0 = [
+		0 : "No Touch Destruction"
+		1 : "Can be destroyed if touched by Player"
+		2 : "Can be destroyed if touched by Monsters"
+		3 : "Can be destroyed if touched by Player and Monsters"
+	]
+	touch_smash_delay(float) : "Touch Destruction Delay" : "0" : "(delay before be destroyed if touch destruction is enabled)"
+]
+@SolidClass
+	base(TargetName)
+	color(0 .4 1)
+= func_rotate : "Rotates a according to the rot_ang properties every time it's triggered" [
+	rot_ang_x(float) : "Rotate X" : "0" : "Degrees to rotate around the X axis"
+	rot_ang_y(float) : "Rotate Y" : "0" : "Degrees to rotate around the Y axis"
+	rot_ang_z(float) : "Rotate Z" : "0" : "Degrees to rotate around the Z axis"
+	wait(float) : "Rotate Duration" : "1" : "Length of time it takes to complete rotation."
+	rad_sound(integer) : "Sound Radius" : 512 : ""
+	volume(float) : "Volume" : 1 : ""
+	noise(string) : "Noise" : "" : "Start sound"
+	noise2(string) : "Noise 2" : "" : "Stop sound"
+]
+@SolidClass
+	base(TargetName)
+	color(0 .5 .8)
+= func_fan : "A simple entity that rotates. Rotation is based on the angles" [
+	angles(vector) : "Angles" : "0 0 0" : ""
+	rot_ang_x(float) : "Rotate X" : "0" : "rotate speed for angle X"
+	rot_ang_y(float) : "Rotate Y" : "0" : "rotate speed for angle Y"
+	rot_ang_z(float) : "Rotate Z" : "0" : "rotate speed for angle Z"
+	spawnflags(flags) = [
+		1 : "Start OFF" : 0 : "When set, the fan will not be rotating when created."
+	]
+]
+@SolidClass color(0 .5 .8) = func_brush : "A simple entity that looks solid but lets you walk through it. Does not block light." []
+@SolidClass = func_rotate_fence : "A rotating brush that rotates up to 90 degrees in either direction depending on where you touch it" [
+	wait(float) : "Wait" : 0 : ""
+	cnt(integer) : "Cnt" : 0 : "If higher than 20 it will not move"
+]
+@SolidClass = func_monsterclip : "" []
+@SolidClass = func_debris : "" [
+	gravity(float) : "Gravity" : : "Gravity to apply. Default is randomised."
+	delay(float) : "Delay" : 0 : ""
+	spawnflags(flags) = [
+		1 : "Explo?"
+		2 : "Visible"
+	]
+]
+@PointClass
+	base(TargetName)
+	color(0.5 0.0 0.5)
+	size(-8 -8 -8, 8 8 8)
+= trigger_shake : "This fixed size trigger cannot be touched, it can only be fired by other events." [
+	wait(float) : "Wait" : "1" : "shake time duration (in seconds, default = 1)"
+	intensity_y(float) : "Vertical Intensity" : "10" : "vertical shake intensity (default = 10)"
+	intensity_x(float) : "Horizontal Intensity" : "10" : "horizontal shake intensity (default = 10)"
+	shake_camera_refresh_rate(float) : "Refresh Rate" : "0.05" : "refresh rate in seconds (default = 0.05)"
+	spawnflags(flags) = [
+		1 : "Keep" : 0 : "Allow the entity to be used multiple times"
+	]
+	sradius(float) : "Radius" : "0" : "Radius of shake in map units (0 = inifnite radius)"
+	sattenuation(boolean) : "Attenuation" : : "Attenuation of intensity based on distance, if radius is setted"
+]
+@SolidClass = trigger_stepheight : "" []
+@SolidClass base(TargetName) color(0.5 0.0 0.5) = trigger_gibzone : "trigger that will determine the zone of the spawning gibs for func_destruct and func_destruct_rotate" []
+@SolidClass
+	base(Target)
+	color(0 .4 1)
+= func_destruct_rotate : "explodes in a shower of gibs when damaged." [
+	avelocity(vector) : "First stage avelocity" : "0 0 0" : "avelocity."
+	avelocity1(vector) : "Seconds stage avelocity" : "0 0 0" : "avelocity."
+	avelocity2(vector) : "Third stage avelocity" : "0 0 0" : "avelocity."
+	base_scale(float) : "Gib Scale" : "1" : "Scales size of gibs. `-1` is no scaling applied."
+	bouncefactor(float) : "Bounce" : "0.25" : "Bounciness of debris (default 0.25)."
+	gibcount(float) : "Gib Count" : "4" : "Amount of gibs (default 4)."
+	gibmodel1(string) : "Debris Model A" : "models/destruct/" : "Custom derbis model A"
+	gibmodel2(string) : "Debris Model B" : "models/destruct/" : "Custom derbis model B"
+	gibmodel3(string) : "Debris Model V" : "models/destruct/" : "Custom derbis model C"
+	mass(float) : "Mass" : "0.75" : "Weight of debris (default 0.75)."
+	noise(string) : "Sound Effect at the start" : "sound/impact/destruct/" : "Sound Effect"
+	noise2(string) : "Sound Effect at the end" : "sound/impact/destruct/" : "Second Sound Effect"
+	particlename(string) : "Particles" : "" : "Name of particles (found in effectinfo.txt)"
+	type(choices) : "Material Type" : 0 = [
+		0 : "Custom (enables custom debris models)"
+		1 : "Stone"
+		2 : "Wood"
+		3 : "Metal"
+		4 : "Glass"
+		5 : "Ice"
+	]
+	rad_sound(float) : "Sound Radius" : "256" : "Radius of destruction sounds."
+	spawnflags(flags) = [
+		1 : "Use Dynamic Light Grid" : 0 : "The destruct will be lit by the lightgrid when falling."
+	]
+	spread_vel(float) : "Spread Factor" : "0" : "Spread Factor."
+	target2(target_destination) : "Gib Zone Target" : "" : "Targetname of the gibzone."
+	velocity(vector) : "First stage velocity" : "0 0 0" : "velocity."
+	velocity1(vector) : "Second stage velocity" : "0 0 0" : "velocity."
+	velocity2(vector) : "Third stage velocity" : "0 0 0" : "velocity."
+	volume(float) : "Sound Volume" : "1" : "Volume of destruction sounds."
+	wait(float) : "First stage Rotate Duration" : "32" : "Length of time it takes to complete rotation."
+	wait1(float) : "Second stage Rotate Duration" : "32" : "Length of time it takes to complete rotation."
+	wait2(float) : "Third stage Rotate Duration" : "32" : "Length of time it takes to complete rotation."
+]
+@SolidClass = func_nodestruct : "" []
+
+
+//
+// entities/func/trap.qc
+//
+@SolidClass
+	base(Target, TargetName)
+	color(0 .4 1)
+= func_blade : "Normal sliding door entity. By default, the door will activate when player walks close to it or when damage is inflicted to it." [
+	alwaysdamage(integer) : "Always do damage" : 0 : "Func deals damage whenever touched"
+	angle(float) : "Direction" : "0" : "Determines the opening direction of trap (up = -1, down = -2)."
+	blade_offset(vector) : "Offset XYZ" : "1 1 1" : "Vector to reduce the size of the bbox for damage (default 1.0 1.0 1.0)."
+	damagerate(float) : "Damage Rate" : "0.1" : "damage rate in seconds, if the value is -1, func will deal damage once then return to start position"
+	dmg(integer) : "Damage Inflicted" : 4 : "Damage value."
+	fake_lighted(integer) : "Fake Lightning" : 0 : "Set to 1 and brush will use fake lightning."
+	forcecrouch(integer) : "Force Crouch" : 0 : "Force crouch for player if causes damage (useful for vertical crushes)"
+	kill_player(integer) : "Kill Player" : 0 : "Func will kill Player"
+	lip(float) : "Lip" : "0" : "Lip remaining at end of move. Default value is 0"
+	loop(choices) : "Loop Flag" : 0 = [
+		0 : "Func doesnt loop, start inactive"
+		1 : "Func  loops, starts active"
+		2 : "Func  loops, start inactive"
+	]
+	spawnflags(flags) = [
+		1 : "Start open"
+	]
+	speed(float) : "Open Move Speed" : "60" : "Determines how fast the crusher moves (default is around 60)."
+	speed2(float) : "Close Move Speed" : "120" : "Determines how fast the crusher moves (default is around 120)."
+	wait(float) : "Return Delay" : "1" : "Number of seconds (open delay)"
+	wait2(float) : "Return Delay" : "1" : "Number of seconds (close delay"
+]
+@SolidClass
+	base(Target)
+	color(0 .4 1)
+= func_trap : "Normal sliding door entity. By default, the door will activate when player walks close to it or when damage is inflicted to it." [
+	alwaysdamage(integer) : "Always do damage" : 0 : "Func deals damage whenever touched"
+	angle(float) : "Direction" : "0" : "Determines the opening direction of trap (up = -1, down = -2)."
+	damagerate(float) : "Damage Rate" : "0.1" : "damage rate in seconds, if the value is -1, func will deal damage once then return to start position"
+	delay(float) : "Start Delay" : "0" : "Number of seconds (open delay)"
+	dmg(integer) : "Damage Inflicted" : 4 : "Damage value."
+	fake_lighted(integer) : "Fake Lightning" : 0 : "Set to 1 and brush will use fake lightning."
+	forcecrouch(integer) : "Force Crouch" : 0 : "Force crouch for player if causes damage (useful for vertical crushes)"
+	kill_player(integer) : "Kill Player" : 0 : "Func will kill Player"
+	lip(float) : "Lip" : "0" : "Lip remaining at end of move. Default value is 0"
+	loop(choices) : "Loop Flag" : 0 = [
+		0 : "Func doesnt loop, start inactive"
+		1 : "Func loops, starts active"
+		2 : "Func  loops, start inactive."
+	]
+	spawnflags(flags) = [
+		1 : "Start open"
+	]
+	speed(float) : "Open Move Speed" : "60" : "Determines how fast the crusher moves (default is around 60)."
+	speed2(float) : "Close Move Speed" : "120" : "Determines how fast the crusher moves (default is around 120)."
+	targetname(target_source) : "Target Name" : "" : "If set, a func_button or trigger is required to activate the door (unless using health key)."
+	wait(float) : "Return Delay" : "1" : "Number of seconds (open delay)"
+	wait2(float) : "Return Delay" : "1" : "Number of seconds (close delay"
+]
+@PointClass
+	color(.8 .1 1)
+	size(-8 -8 -8, 8 8 8)
+= info_beam : "Starting point for emitting purple energy beam for e2m4 map." [
+	dmg(float) : "Damage Inflicted" : "10" : "Damage inflicted"
+	duration(float) : "Duration" : "0.5"
+	scale(float) : "Scale" : "1"
+	target(target_destination) : "Target" : : "Target this to an info_notnull"
+	targetname(target_source) : "Target Name" : : "Target the beam to switch it on."
+	using(integer) : "Start Active" : 1 : "The emitter will start emiting particles, if 0, targetname is required."
+	wait(float) : "Wait delay" : "1" : "Duration of beam. Set to -1 for permanent."
+]
+@PointClass = lava_trap []
+
+
+//
+// entities/func/bob.qc
+//
+@SolidClass = func_bob : "Moves back and forth between the two targets" [
+	count(float) : "Count" : "2" : "Easing factor"
+	distancetotarget(float) : "Distance to Target" : "128"
+	speed(float) : "Bob Cycle Time" : "512" : "amount of time in seconds for one complete oscillation cycle."
+	target(target_destination) : "Target 1"
+	target2(target_destination) : "Target 2"
+]
+
+
+//
+// entities/func/bobbing.qc
+//
+@SolidClass
+	base(TargetName)
+	color(0 0.5 0.8)
+= func_bobbing : "Solid entity that oscillates back and forth in a linear motion. By default, it will have an amount of displacement in either direction equal to the dimension of the brush in the axis in which it's bobbing. Entity bobs on the Z axis (up-down) by default. It can also emit sound if the `noise` key is set. Will crush the player when blocked." [
+	color(vector) : "Model Light Color" : "1 1 1" : "constantLight color of .md3 model included with entity. Has no effect on the entity's brushes (default 1 1 1)."
+	height(integer) : "Vertical Travel" : 32 : "sets the amount of travel of the oscillation movement (default 32)."
+	light(float) : "Model Light Intensity" : "0" : "constantLight radius of .md3 model included with entity. Has no effect on the entity's brushes (default 0)."
+	model2(string) : "Model File" : : "path/name of model to include (eg: models/mapobjects/jets/jets01.md3)."
+	noise(string) : "Sound File" : : "path/name of .wav file to play. Use looping sounds only (eg. sound/world/drone6.wav - See Notes)."
+	origin(vector) : "World Origin" : : "alternate method of setting XYZ origin of sound and .md3 model included with entity (See Notes)."
+	phase(float) : "Bob Cycle Phase" : "0" : "sets the start offset of the oscillation cycle. Values must be 0 &lt; phase &lt; 1. Any integer phase value is the same as no offset (default 0)."
+	spawnflags(flags) = [
+		1 : "X Axis" : 0 : "entity will bob along the X axis."
+		2 : "Y Axis" : 0 : "entity will bob along the Y axis."
+	]
+	speed(float) : "Bob Cycle Time" : "16" : "amount of time in seconds for one complete oscillation cycle."
+	//-------- NOTES --------
+	//In order for the sound to be emitted from the entity, it is recommended to include a brush with an origin shader at its center, otherwise the sound will not follow the entity as it moves. Setting the origin key is simply an alternate method to using an origin brush. When using the model2 key, the origin point of the model will correspond to the origin point defined by either the origin brush or the origin coordinate value.
+	//
+	//Target this entity with a misc_model to have the model attached to the entity (set the model's "target" key to the same value as this entity's "targetname").
+]
+
+
+//
+// entities/func/plat.qc
+//
+@SolidClass
+	color(0 .4 1)
+= func_plat : "Rising platform the player can ride to reach higher places. Plats must always be drawn in the raised position, so they will operate and be lighted correctly but they spawn in the lowered position. The plat will stay in the raised position until the player steps off. There are no proper sounds for this entity, only beep noises. It will spawn in the game and work properly but it sounds silly (see notes)." [
+	dmg(integer) : "Damage Inflicted" : 4 : "Damage to inflict on player when he blocks operation of plat (default 4). Plat will reverse direction when blocked."
+	height(float) : "Vertical Travel" : : "If set, this will determine the total amount of vertical travel of the plat."
+	lip(float) : "Lip" : "16" : "Lip remaining at end of move (default 16). Has no effect if `height` is set."
+	noise(string) : "start sound 1" : "" : "sound to play"
+	noise1(string) : "working sound 2" : "" : "sound to play"
+	noise2(string) : "stop sound 3" : "" : "sound to play"
+	rad_sound(float) : "Sound Radius" : "256" : "Radius of sounds."
+	speed(float) : "Move Speed" : "150" : "Determines how fast the plat moves (default 150)."
+	targetname(target_source) : "Target Name" : "" : "If set, the trigger that points to this will raise the plat each time it fires. The plat raises and comes back down a second later if no player is on it."
+	volume(float) : "Sound Volume" : "1" : "Volume of sounds."
+]
+
+
+//
+// entities/func/weather.qc
+//
+@SolidClass
+	base(TargetName)
+	color(.4 .4 .4)
+= func_weather : "Particles Emitter, use an invisible brush to determine the area of spawning" [
+	type(choices) : "Type of weather particle" : 1 = [
+		1 : "Snow"
+		2 : "Rain"
+	]
+	delay(float) : "Delay time" : "0.1" : "Delay time between each particle spawning"
+	density(integer) : "Density ammount" : 1 : "amount of particle density(default is 1)."
+]
+@SolidClass
+	base(TargetName)
+	color(.4 .4 .4)
+= func_particles : "Particles Emitter, use an invisible brush to determine the area of spawning" [
+	particlename(string) : "Particle effect Name" : "proj_heretic_impact" : "which particle name will use, located in effectinfo.txt"
+	delay(float) : "Delay time" : "0.5" : "Delay time between each particle spawning"
+	density(integer) : "Density ammount" : 1 : "multiply of ammount of particles."
+	count(integer) : "ammount of particles" : 1 : "amount of particles(default is based on size of brush)."
+	using(integer) : "Start Active" : 1 : "The emitter will start emiting particles, if 0, targetname is required."
+	clipdist(integer) : "Clip Distance" : 512 : "Distance at which particles will no longer be shown."
+]
+@PointClass color(1 1 1) size(-2 -2 -2, 2 2 2) = misc_lightning : "Lightning. It requires a big real time light of 12, 13 , 14 lightstyles placed in rtlights file in maps/ folder." [
+	style(choices) : "Light Style" : 0 = [
+		12 : "12 lightstyle"
+		13 : "13 lightstyle"
+		14 : "14 lightstyle"
+	]
+	noise(string) : "clap thunder sound 1" : "env/thunder_clap1.ogg" : "sound to play, default is env/thunder_clap1.ogg"
+	noise1(string) : "clap thunder sound 2" : "env/thunder_clap2.ogg" : "sound to play, default is env/thunder_clap2.ogg"
+	noise2(string) : "clap thunder sound 3" : "env/thunder_clap3.ogg" : "sound to play, default is env/thunder_clap3.ogg"
+	targetname(target_source) : "Target Name" : : "If used, misc_lightning should be targeted by button or trigger"
+	wait(float) : "Wait delay" : "10" : "amount of time between each lightning flash"
+	delay(float) : "Delay" : "10" : "amount of time between each lightning flash + wait, it will work for the first spawn as well"
+]
+@SolidClass
+	base(TargetName)
+	color(0.5 0.0 0.5)
+= trigger_lightning : "If the trigger is touched by player random lightnings will spawn, useful only for exterior areas. Noise is picked randomly each time." [
+	delay(float) : "Additional Random Wait" : "10" : "Additional time that is added to the wait, the values are from 0 to the value of the specific"
+	noise(string) : "Noise" : "env/amb/thunder1.ogg" : ""
+	noise1(string) : "Noise 1" : "env/amb/thunder2.ogg" : ""
+	noise2(string) : "Noise 2" : "env/amb/thunder3.ogg" : ""
+	wait(float) : "Wait" : "10" : "Minimum time lapse between lightnings, -1 = single lightning"
+]
+@PointClass base(TargetName) color(.4 .4 .4) size(-8 -8 -8, 8 8 8) = model_emitter : "Particles Emitter, use an invisible point to determine the origin of spawning" [
+	clipdist(integer) : "Clip Distance" : 512 : "Distance at which particles will no longer be shown. Default 512 units."
+	count(integer) : "Amount of Particles" : 1 : "amount of particles model in each spawn."
+	delay(float) : "Delay time" : "0.5" : "Delay time between each model spawning"
+	gravity(float) : "Gravity" : "-0.1" : "Gravity of model (default normal gravity: 1)."
+	loop(integer) : "Looped" : 1 : "Is the use continous? -1 no, 1 YES"
+
+	min_size(float) : "Min Scale Size" : "1" : "min scale value."
+	max_size(float) : "Max Scale Size" : "1" : "max scale value."
+	min_time(float) : "Min Time Life" : "1" : "min time life before fade."
+	max_time(float) : "Max Time Life" : "1" : "max time life before fade."
+
+	model1(string) : "Spawned Model A" : "particles/" : "Spawned model A"
+	model2(string) : "Spawned Model B" : "particles/" : "Spawned model B"
+	model3(string) : "Spawned Model C" : "particles/" : "Spawned model C"
+	model4(string) : "Spawned Model D" : "particles/" : "Spawned model D"
+	model5(string) : "Spawned Model E" : "particles/" : "Spawned model E"
+	model6(string) : "Spawned Model F" : "particles/" : "Spawned model F"
+	model7(string) : "Spawned Model G" : "particles/" : "Spawned model G"
+	model8(string) : "Spawned Model H" : "particles/" : "Spawned model H"
+
+	noise1(string) : "Noise 1"
+	noise2(string) : "Noise 2"
+	noise3(string) : "Noise 3"
+
+	speed(float) : "Speed" : "16" : "default speed of the models."
+	originoffset(vector) : "Origin Offset" : "0 0 0" : "Offset particle spawning origin by this values. Coordspace are world, x – forward, y – right, z – up."
+	originjitter(vector) : "Origin Jitter" : "0 0 0" : "Like originoffset but each axis is jittered between -value/+value. Hence it is defining spherical shape of particle random spawning."
+	particle_movetype(choices) : "Movetype" : 8 = [
+		0 : "NONE"
+		6 : "TOSS"
+		8 : "NOCLIP"
+		9 : "FLYMISSILE"
+		10 : "BOUNCE"
+		11 : "BOUNCEMISSILE"
+	]
+	particle_modelflags(choices) : "Modelflags" : 0 = [
+		1 : "ROCKET"
+		2 : "GRENADE"
+		4 : "GIB"
+		8 : "ROTATE"
+		16 : "GREEN"
+		32 : "ZOMGIB"
+		64 : "ORANGE"
+		128 : "PURPLE"
+	]
+	particlename(string) : "Trail Effect Name" : "" : "which trail effect model will use if present, located in effectinfo.txt"
+	spawnflags(flags) = [
+		1 : "Start Active" : 0 : "The emitter will start emiting particles"
+	]
+	valpha(vector) : "Alpha  Values" : "0 1 1" : "alpha (min_alpha max_alpha fade_rate)."
+	velocityjitter(vector) : "Velocity Jitter" : "0 0 0" : "Like velocity offset but each axis is jittered between -value/+value. Hence it is defining spherical shape of particle random spawning."
+	velocityoffset(vector) : "Velocity Offset" : "0 0 0" : "Add this amount of constant velocity to particle on spawn."
+]
+@SolidClass
+	color(0.5 0.0 0.5)
+= trigger_fog : "Trigger fog to change the fog values and interpolates the values over time" [
+	n_fog_d(float) : "Density" : "0" : "Density value of the fog."
+	n_fog_r(float) : "Red" : "0" : "Red value of the fog."
+	n_fog_g(float) : "Green" : "0" : "Green value of the fog."
+	n_fog_b(float) : "Blue" : "0" : "Blue value of the fog."
+	n_fog_a(float) : "Alpha" : "1" : "Alpha value of the fog. Default value is 1."
+	n_fog_s(float) : "Start" : "0" : "Start distance from player fog will be rendered."
+	n_fog_e(float) : "End" : "16384" : "The maximum distance the _fog_ will be rendered from the player. Default value is 16384."
+	n_fog_h(float) : "Height" : "1073741824" : "Height of the fog top. Default value is 1073741824."
+	n_fog_f(float) : "Fade Depth" : "128" : "Fade depth value of the fog. Default value is 128."
+	spawnflags(flags) = [
+		1 : "No touch" : 0 : "Can't be triggered by touching, only by triggering."
+		2 : "Force start"
+	]
+	wait(float) : "Transition Time" : "1" : "Number of seconds transition will take. Default value is 1."
+]
+
+
+//
+// entities/misc/cyst.qc
+//
+@PointClass
+	color(0 1 0)
+	size(-8 -8 -8, 8 8 8)
+	model("models/items/cysts.md3")
+= misc_cyst : "A solid cyst entity that explodes when triggered" [
+	targetname(target_source) : "Target Name" : : "Cyst can explode it with func_button or trigger"
+	dmg(float) : "Damage Inflicted" : "16" : "Damage caused by explosion"
+	sradius(float) : "Radius" : "16" : "Radius of explosion"
+	health(float) : "Health" : "16" : "Health of the cyst. if health is 0 it should be triggered to explode"
+	scale(float) : "Model Scale" : "2" : "Scale of the model, it will affect collisions box size"
+	type(float) : "Model Type" : "1" : "Values from 1 to 4, it will change the default cyst model"
+]
+
+
+//
+// entities/misc/portal_camera.qc
+//
+@PointClass
+	color(1 .5 .25)
+	size(-8 -8 -8, 8 8 8)
+= misc_portal_surface : "Portal surface indicator. This will `lock on` the brush face closest to it and identify as a portal. The view displayed on the portal surface is the view of the misc_portal_camera that this entity targets. Also used for mirrors (see notes)." [
+	target(target_destination) : "Target" : : "Point this to a misc_portal_camera that `sees` the view you want to display on the portal."
+	//-------- NOTES --------
+	//The entity must be no farther than 64 units away from the portal surface to lock onto it. To make a mirror, apply the common/mirror shader to the surface, place this entity near it but don't target a misc_portal_camera.
+]
+
+
+//
+// entities/jumpad.qc
+//
+@SolidClass
+	color(0.5 0.0 0.5)
+= trigger_jumppad : "Players that touch this will jump in the direction of the targetted target_position" [
+	angles(vector) : "Angles" : "0 0 0" : ""
+	target(target_destination) : "Target" : : "point target, destination of the jump"
+	speed(float) : "Speed" : "1000" : "the speed thrown forward. default is 1000"
+	stoptime(float) : "No input Time" : "0" : "how much time inputs for player will be deactived, 0 value forces a frikfiked value"
+]
+
+
+//
+// entities/portal.qc
+//
+@PointClass model("models/objects/hubs/hub1_portal.md3") = portal_hub1 : "point entity" []
+@PointClass color(0.4 0.5 0.4) size(-24 -24 -12, 24 24 12) model({"path": "models/objects/hubs/intro_portal.md3"}) = portal_intro : "" []
+@PointClass model("models/objects/hubs/hub2_portal.md3") = portal_hub2 : "point entity" []
+@PointClass model("models/objects/hubs/hub3_portal.md3") = portal_hub3 : "point entity" []
+
+
+//
+// entities/object_coffer.qc
+//
+@PointClass
+	color(0 1 1)
+	size(-32 -32 0, 32 32 64)
+	model({{
+		episode == 1 -> {"path": "models/objects/coffers/coffer1_locked.md3"},
+		episode == 2 -> {"path": "models/objects/coffers/coffer2_locked.md3"},
+		episode == 3 -> {"path": "models/objects/coffers/coffer3_locked.md3"},
+		"models/objects/coffers/coffer1_locked.md3"
+	}})
+= object_coffer : "object_coffer"[
+	displacement(boolean) : "Displacement" : 0
+	episode(choices) : "Episode" : 1 = [
+		1 : "Episode 1"
+		2 : "Episode 2"
+		3 : "Episode 3"
+	]
+	coffer_artifacts(choices) : "Artifacts" : 0 = [
+		1 : "Mark of Revelation"
+		2 : "Drowners Apparatus"
+		3 : "Flask Of Rage"
+		4 : "Confounding Attar"
+		5 : "Soul Tether"
+		6 : "Life Siphon"
+		7 : "Orb Of Deflection"
+		8 : "Cruel Aegis"
+		9 : "Vicious Animus"
+		10 : "Shockwave"
+		11 : "Void Grenade"
+	]
+	coffer_ammo(choices) : "Ammo" : 0 = [
+		1 : "Slugs"
+		2 : "Shells"
+		3 : "Fangs"
+		4 : "Cysts"
+	]
+	coffer_armor(choices) : "Armor" : 0 = [
+		1 : "Armor shard"
+		2 : "Armor helm"
+		3 : "Armor"
+		4 : "Dark armor shard"
+		5 : "Dark helm"
+		6 : "Dark armor"
+	]
+	coffer_health(choices) : "Health" : 0 = [
+		1 : "Vial of lifeblood"
+		2 : "Beaker of lifeblood"
+		3 : "Chalice of lifeblood"
+	]
+	type(choices) : "Type" : 0 = [
+		2 : "Jump scare"
+		3 : "Invisible when opened"
+	]
+]
+@PointClass
+	color(0 1 1)
+	size(-32 -32 0, 32 32 64)
+	model("models/objects/coffers/coffer1_locked.md3")
+= object_fakecoffer : "A trick coffer to scare the player. Gives nothing." [
+	type(integer) : "Type" : 0 : "A value of 1 launches shooting heads when opened"
+]
+
+
+//
+// ../orrey.qc
+//
+@PointClass
+	color(0 0.6 1)
+	size(-12 -12 -12, 12 12 12)
+	model({"path": "models/objects/orrery/orrery.md3"})
+= object_orrery : "Grand orrery model for e2m5: The Watchtowers. Can be triggered to animate." []
+
+
+//
+// shepherd.qc
+//
+@PointClass
+	color(.7 .7 .7)
+	size(-16 -16 -24, 16 16 32)
+	model("models/enemies/shepherd/shepherd.md3")
+= place_shepherd : "The Shepherd of Wayward Souls. For INTRO and HUB map appearances." [
+	spawnflags(flags) = [
+		1 : "Hub Behaviour" : 0 : "The Shepherd will deliver monologues appropriate for each encounter level in a hub map."
+	]
+]
+
+
+//
+// monsters/ai.qc
+//
+@PointClass
+	color(.5 .3 0)
+	size(-8 -8 -8, 8 8 8)
+	model({{
+		model -> {"path": model, "scale": 0.125},
+		         {"path": "tb/path_corner.png", "scale": 0.125}
+	}})
+= path_corner : "Path corner entity that func_trains can be made to follow." [
+	target(target_destination) : "Target" : "" : "Point to next path_corner in the path."
+	targetname(target_source) : "Target Name" : "" : "The train following the path or the previous path_corner in the path points to this."
+	speed(float) : "Move Speed" : "" : "Speed of func_train while moving to the next path corner. This will override the speed value of the train."
+	wait(float) : "Corner Delay" : "0" : "Number of seconds func_train will pause on path corner before moving to next path corner (default 0 - see notes)."
+	// -------- NOTES --------
+	// Setting the wait key to -1 will not make the train stop on the path corner, it will simply default to 0.
+]
+@PointClass color(.5 .3 0) size(-8 -8 -8, 8 8 8) = path_corner_start : "Path corner entity that func_trains can be made to follow. Does not require a targetname" [
+	target(target_destination) : "Target" : "" : "Point to next path_corner in the path."
+	targetname(target_source) : "Target Name" : "" : "The train following the path or the previous path_corner in the path points to this."
+	speed(float) : "Move Speed" : "" : "Speed of func_train while moving to the next path corner. This will override the speed value of the train."
+	wait(float) : "Corner Delay" : "0" : "Number of seconds func_train will pause on path corner before moving to next path corner (default 0 - see notes)."
+	// -------- NOTES --------
+	// Setting the wait key to -1 will not make the train stop on the path corner, it will simply default to 0.
+]
+@PointClass base(TargetName) color(0 .5 0) size(-8 -8 -8, 8 8 8) = info_angle : "Used as a angle target for trigger_angle" []
+@SolidClass color(0.5 0.0 0.5) = trigger_angle : "Changes the angles of monsters." [
+	minorangle(float) : "Min Angle factor" : "0" : "sets min angle factor to touch, from 1 to -1"
+	target(target_destination) : "Target" : : "target info_angle to set y angles"
+	angle(float) : "Direction" : : "Determines the orientation angle of the trigger."
+]
+@SolidClass color(0.5 0.0 0.5) = trigger_no_check_angles : "Turn some monsters in turrets." [
+    no_fixed_angles_time(float) : "Time" : "0" : "time in seconds when the checking angles AI will be off, use -1 to activate it again"
+]
+
+
+//
+// monsters/monsters.qc
+//
+@BaseClass = Monster [
+    spawnflags(flags) = [
+        1 : "Ambush" : 0 : "the monster will only wake up on really seeing the player, not another monster getting angry"
+    ]
+]
+
+
+//
+// monsters/monster_afflicted.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-10 -10 -32, 10 10 32)
+	model({"path": "models/enemies/afflicted/afflicted.md3"})
+= monster_afflicted : "Monster: Afflicted" []
+
+
+//
+// monsters/monster_widow.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-12 -12 -32, 12 12 24)
+	model({"path": "models/enemies/widow/widow.md3"})
+= monster_widow : "Monster: Widow" []
+
+
+//
+// monsters/monster_wraith.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-16 -16 -32, 16 16 32)
+	model({"path": "models/enemies/wraith/wraith.md3"})
+= monster_wraith : "Monster: Wraith" []
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-32 -32 -32, 32 32 32)
+	model({"path": "models/enemies/symbol/symbol.md3"})
+= monster_bigwraith : "Monster: Big Wraith" []
+
+
+//
+// monsters/monster_executioner.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-16 -16 -32, 16 16 48)
+	model({"path": "models/enemies/executioner/executioner.md3"})
+= monster_executioner : "Monster: Executioner" []
+
+
+//
+// monsters/monster_invader.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-16 -16 -32, 16 16 32)
+	model({"path": "models/enemies/invader/invader.md3"})
+= monster_invader : "Monster: Invader" []
+
+
+//
+// monsters/monster_wretch.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-16 -16 -32, 16 16 32)
+	model({"path": "models/enemies/wretch/wretch.md3"})
+= monster_wretch : "Monster: Wretch" []
+
+
+//
+// monsters/monster_prowler.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-30 -30 -24, 30 30 24)
+	model({"path": "models/enemies/prowler/prowler.md3"})
+= monster_prowler : "Prowler ( invisible manspider )" []
+
+
+//
+// monsters/monster_stricken.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-48 -48 -32, 48 48 44)
+	model({"path": "models/enemies/stricken/stricken.md3"})
+= monster_stricken : "Monster: Stricken" []
+
+
+//
+// monsters/monster_heretic.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-32 -32 -32, 32 32 32)
+	model({"path": "models/enemies/heretic/heretic.md3"})
+= monster_heretic : "Monster: Heretic" []
+
+
+//
+// monsters/monster_fallen.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-12 -12 -32, 12 12 32)
+	model({"path": "models/enemies/fallen/fallen1.md3"})
+= monster_fallen : "Monster: Fallen" [
+	melonhead(choices) : "Variant" : 0 = [
+		0 : "Normal"
+		1 : "Cyst Head"
+		2 : "Fire"
+		3 : "Crystal"
+		4 : "Cyst"
+	]
+]
+
+
+//
+// monsters/monster_oppressor.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-20 -20 -32, 20 20 56)
+	model({"path": "models/enemies/oppressor/oppressor.md3"})
+= monster_oppressor : "Monster: Oppressor" []
+
+
+//
+// monsters/monster_symbol.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-48 -48 -48, 48 48 48)
+	model({"path": "models/enemies/symbol/symbol.md3"})
+= monster_symbol : "Monster: Symbol" []
+
+
+//
+// monsters/monster_brute.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-32 -32 -32, 32 32 48)
+	model({"path": "models/enemies/brute/brute.md3"})
+= monster_brute : "Brute ( metal gorilla )" []
+
+
+//
+// monsters/monster_lurker.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-22.4 -22.4 -22.4, 22.4 22.4 22.4)
+	model({"path": "models/enemies/lurker/lurker.md3"})
+= monster_lurker : "Lurker ( nopefish )" []
+
+
+//
+// monsters/monster_keeper.qc
+//
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-16 -16 0, 16 16 64)
+	model({"path": "models/enemies/keeper/keeper.md3"})
+= monster_keeper : "Keeper ( flying mechanical brain forcefield generator )" []
+
+
+//
+// monsters/spawner.qc
+//
+@PointClass
+	base(Weapon)
+	color(1 1 0)
+	size(-16 -16 -32, 16 16 32)
+= enemy_spawner : "Spawner enemies entity" [
+	classmonster1(choices) : "Encounter1" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster2(choices) : "Encounter2" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster3(choices) : "Encounter3" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster4(choices) : "Encounter4" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster5(choices) : "Encounter5" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	count(integer) : "Amount of monsters" : 1 : "number of monsters to spawn"
+	death_target(target_destination) : "Death Target" : : "All entities with a matching targetname will be triggered once the monster is killed."
+	delay(float) : "Delay" : "5" : "if the amount of monsters to spawn is bigger than 1, this will be the time between each spawn"
+	likecharge(integer) : "Spawn Charging" : 0 : "Enemy spawns in the charging state."
+	nojump(integer) : "No Jumpp" : 0 : "1 =  monster will ignore jumppads and trigger_monsterjumps"
+	rise(integer) : "Rise Animation" : 0 : "1 =  rise animation (if present)"
+	spawnflags(flags) = [
+		1 : "Ambush" : 0 : "the monster will only wake up on really seeing the player, not another monster getting angry"
+	]
+	target(target_destination) : "Target" : : "All entities with a matching targetname will be triggered."
+	targetname(target_source) : "Target Name" : : "If set, a func_button or trigger is required to activate the door (unless using health key)."
+	turret(integer) : "Turret" : 0 : "Monster will not run, just shoot"
+	type(integer) : "SpawnAngry" : 0 : "1 = monster will wake up being furious and following the player (fallen will spawn attacking)"
+	wait(float) : "Wait delay" : "0" : "Number of seconds before the first spawn."
+]
+@PointClass base(Weapon) color(1 0 0.3) size(-32 -32 -64, 32 32 64) model("models/warp/warp.md3") = enemy_spawner_warp : "Spawner enemies entity, using warp" [
+	classmonster1(choices) : "Encounter1" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster2(choices) : "Encounter2" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster3(choices) : "Encounter3" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster4(choices) : "Encounter4" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster5(choices) : "Encounter5" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	death_target(target_destination) : "Death Target" : : "All entities with a matching targetname will be triggered once the monster is killed."
+	fastwarp(integer) : "No Vortex animation" : 0 : "1 =  Vortex animation will be skipped"
+	likecharge(integer) : "Spawn Charging" : 0 : "Enemy spawns in the charging state."
+	nojump(integer) : "No Jumpp" : 0 : "1 =  monster will ignore jumppads and trigger_monsterjumps"
+	rise(integer) : "Rise Animation" : 0 : "1 =  rise animation (if present)"
+	spawnflags(flags) = [
+		1 : "Ambush" : 0 : "the monster will only wake up on really seeing the player, not another monster getting angry"
+	]
+	target(target_destination) : "Target" : : "All entities with a matching targetname will be triggered."
+	targetname(target_source) : "Target Name" : : "If set, a func_button or trigger is required to activate the door (unless using health key)."
+	type(integer) : "SpawnAngry" : 0 : "1 = monster will wake up being furious and following the player (fallen will spawn attacking)"
+]
+@SolidClass base(Target) color(0.5 0.0 0.5) = trigger_aggro : "Targeted monster will become angry at player." []
+
+
+//
+// monsters/monster_boss1.qc
+//
+@PointClass
+	base(Target, TargetName)
+	color(.8 .6 .6)
+	size(-8 -8 -256, 8 8 256)
+= boss_path : "Point to which boss monsters will travel, depending on their behaviour. Like a path_corner for normal monsters to walk between." []
+
+
+//
+// monsters/monster_boss3.qc
+//
+@PointClass
+	base(Target, TargetName)
+	color(1 0 0)
+	size(-16 -16 -32, 16 16 32)
+	model({"path": "models/enemies/martyr/martyr.md3"})
+= boss_martyr : "Martyr creature, focal point of boss3 summoning behaviour." []
+@PointClass
+	base(Target, TargetName)
+	color(.7 .2 0)
+	size(-16 -16 -24, 16 16 24)
+	model("models/warp/warp.md3")
+= boss_summoner : "Point at which boss3 will spawn monsters during summonings." [
+	classmonster1(choices) : "Encounter" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "Melon Head ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying brain claw )"
+	]
+	classmonster2(choices) : "Encounter" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "Melon Head ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying brain claw )"
+	]
+	classmonster3(choices) : "Encounter" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "Melon Head ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying brain claw )"
+	]
+	classmonster4(choices) : "Encounter" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "Melon Head ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying brain claw )"
+	]
+	classmonster5(choices) : "Encounter" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "Melon Head ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying brain claw )"
+	]
+]
+@PointClass
+	base(Target, TargetName)
+	color(.9 .3 0)
+	size(-128 -128 -128, 128 128 256)
+	model("models/enemies/boss3/boss3_start.md3")
+= boss_guardian3 : "3rd boss monster, The Dreadful One. The big bad, the final form." []
+
+
+//
+// nodegraph/nodegraph.qc
+//
+@PointClass
+	color(1 .5 0)
+	size(-64 -64 -16, 64 64 16)
+	model({"path": "models/dev/node_ed.md3"})
+= info_node : "Navigation node, for Wrath monster pathing." [
+	// Place nodes at least 128 units apart, indicated by circumference ring on model.
+]
+
